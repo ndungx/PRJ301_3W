@@ -1,0 +1,137 @@
+package com.ndungx.controller;
+
+import com.ndungx.daos.UserDAO;
+import com.ndungx.dtos.CreateErrorDTO;
+import com.ndungx.dtos.UserDTO;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.SQLException;
+import javax.naming.NamingException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/*
+ * @author NDungx
+ */
+@WebServlet(name = "CreateServlet", urlPatterns = {"/CreateServlet"})
+public class CreateServlet extends HttpServlet {
+
+    private static final String LOGIN_PAGE = "index.html";
+    private static final String CREATE_PAGE = "createAccount.jsp";
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+
+        String userID = request.getParameter("userID");
+        String fullname = request.getParameter("fullname");
+        String roleID = request.getParameter("roleID");
+        String password = request.getParameter("password");
+        String confirm = request.getParameter("confirm");
+        String url = CREATE_PAGE;
+        UserDAO dao = new UserDAO();
+        CreateErrorDTO error = new CreateErrorDTO("", "", "", "", "");
+        boolean check = false;
+
+        try {
+            if (userID.length() < 3 || userID.length() > 10) {
+                check = true;
+                error.setUserIDError("userID must be > 3 and < 10");
+            }
+            if (fullname.length() < 5 || fullname.length() > 50) {
+                check = true;
+                error.setFullnameError("full name must be > 5 and < 50");
+            }
+            if (roleID.length() < 2 || roleID.length() > 10) {
+                check = true;
+                error.setRoleIDError("role ID must be > 2 and < 10");
+            }
+            if (roleID.length() < 2 || roleID.length() > 10) {
+                check = true;
+                error.setRoleIDError("role ID must be > 2 and < 10");
+            }
+            if (password.length() < 4 || password.length() > 20) {
+                check = true;
+                error.setPasswordError("password must be > 4 and < 20");
+            } else if (!confirm.equals(password)) {
+                check = true;
+                error.setConfirmError("confirm does not match password");
+            }
+            if (check) {
+                request.setAttribute("ERROR", error);
+            } else {
+                boolean checkDuplicate = dao.checkDuplicate(userID);
+                if (checkDuplicate) {
+                    error.setUserIDError("user ID is duplicate");
+                    request.setAttribute("ERROR", error);
+                } else {
+                    UserDTO dto = new UserDTO(userID, fullname, roleID, password);
+                    dao.createAccount(dto);
+                    url = LOGIN_PAGE;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (NamingException ex) {
+            ex.printStackTrace();
+        } finally {
+            RequestDispatcher rd = request.getRequestDispatcher(url);
+            rd.forward(request, response);
+            out.close();
+        }
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}
