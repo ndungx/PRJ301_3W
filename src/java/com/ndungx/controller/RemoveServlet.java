@@ -1,7 +1,6 @@
 package com.ndungx.controller;
 
-import com.ndungx.daos.UserDAO;
-import com.ndungx.dtos.UserDTO;
+import com.ndungx.dtos.CartDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -15,11 +14,11 @@ import javax.servlet.http.HttpSession;
 /*
  * @author NDungx
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "RemoveServlet", urlPatterns = {"/RemoveServlet"})
+public class RemoveServlet extends HttpServlet {
 
     private static final String ERROR_PAGE = "error.jsp";
-    private static final String SEARCH_PAGE = "search.jsp";
+    private static final String VIEW_CART_PAGE = "viewCart.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,20 +35,16 @@ public class LoginServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         String url = ERROR_PAGE;
+        String id = request.getParameter("id");
 
         try {
-            String userID = request.getParameter("userID");
-            String password = request.getParameter("password");
-            UserDAO dao = new UserDAO();
-            UserDTO dto = dao.checkLogin(userID, password);
             HttpSession session = request.getSession();
-            if (dto != null) {
-                session.setAttribute("LOGIN_USER", dto);
-                url = SEARCH_PAGE;
+            CartDTO cart = (CartDTO) session.getAttribute("CART");
+            if (cart != null) {
+                cart.delete(id);
+                session.setAttribute("CART", cart);
+                url = VIEW_CART_PAGE;
             }
-        } catch (Exception e) {
-            String errMsg = e.getMessage();
-            log("LoginServlet _ SQL: " + errMsg);
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

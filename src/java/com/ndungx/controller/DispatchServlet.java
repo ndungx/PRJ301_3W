@@ -17,13 +17,15 @@ public class DispatchServlet extends HttpServlet {
 
     private static final String LOGIN_PAGE = "index.html";
     private static final String LOGIN_CONTROLLER = "LoginServlet";
-    private static final String LOGIN_GOOGLE_CONTROLLER = "LoginGoogleServlet";
     private static final String SEARCH_CONTROLLER = "SearchServlet";
     private static final String LOGOUT_CONTROLLER = "LogoutServlet";
     private static final String DELETE_CONTROLLER = "DeleteServlet";
     private static final String UPDATE_CONTROLLER = "UpdateServlet";
     private static final String CREATE_CONTROLLER = "CreateServlet";
-    
+    private static final String ADD_CONTROLLER = "AddServlet";
+    private static final String VIEW_CART_PAGE = "viewCart.jsp";
+    private static final String REMOVE_CONTROLLER = "RemoveServlet";
+    private static final String EDIT_CART_CONTROLLER = "EditServlet";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -57,8 +59,14 @@ public class DispatchServlet extends HttpServlet {
                 url = UPDATE_CONTROLLER;
             } else if (button.equals("Create")){
                 url = CREATE_CONTROLLER;
-            }else if (button.equals("login-google")){
-                url = LOGIN_GOOGLE_CONTROLLER;
+            } else if (button.equals("Add")){
+                url = ADD_CONTROLLER;
+            } else if (button.equals("View")){
+                url = VIEW_CART_PAGE;
+            } else if (button.equals("Remove")){
+                url = REMOVE_CONTROLLER;
+            } else if (button.equals("Edit")){
+                url = EDIT_CART_CONTROLLER;
             }
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);

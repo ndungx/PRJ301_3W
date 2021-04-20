@@ -1,7 +1,7 @@
 package com.ndungx.controller;
 
-import com.ndungx.daos.UserDAO;
-import com.ndungx.dtos.UserDTO;
+import com.ndungx.dtos.CartDTO;
+import com.ndungx.dtos.TeaDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -15,11 +15,11 @@ import javax.servlet.http.HttpSession;
 /*
  * @author NDungx
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "EditServlet", urlPatterns = {"/EditServlet"})
+public class EditServlet extends HttpServlet {
 
     private static final String ERROR_PAGE = "error.jsp";
-    private static final String SEARCH_PAGE = "search.jsp";
+    private static final String VIEW_CART_PAGE = "viewCart.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,20 +36,24 @@ public class LoginServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         String url = ERROR_PAGE;
+        String id = request.getParameter("id");
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
 
         try {
-            String userID = request.getParameter("userID");
-            String password = request.getParameter("password");
-            UserDAO dao = new UserDAO();
-            UserDTO dto = dao.checkLogin(userID, password);
             HttpSession session = request.getSession();
-            if (dto != null) {
-                session.setAttribute("LOGIN_USER", dto);
-                url = SEARCH_PAGE;
+            CartDTO cart = (CartDTO) session.getAttribute("CART");
+            TeaDTO teadto = null;
+            for (TeaDTO tea : cart.getCart().values()) {
+                if (tea.getId().equals(id)) {
+                    String name = tea.getName();
+                    double price = tea.getPrice();
+                    teadto = new TeaDTO(id, name, quantity, price);
+                    break;
+                }
             }
-        } catch (Exception e) {
-            String errMsg = e.getMessage();
-            log("LoginServlet _ SQL: " + errMsg);
+            cart.update(id, teadto);
+            session.setAttribute("CART", cart);
+            url = VIEW_CART_PAGE;
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

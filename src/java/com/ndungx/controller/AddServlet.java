@@ -1,7 +1,7 @@
 package com.ndungx.controller;
 
-import com.ndungx.daos.UserDAO;
-import com.ndungx.dtos.UserDTO;
+import com.ndungx.dtos.CartDTO;
+import com.ndungx.dtos.TeaDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -15,11 +15,11 @@ import javax.servlet.http.HttpSession;
 /*
  * @author NDungx
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "AddServlet", urlPatterns = {"/AddServlet"})
+public class AddServlet extends HttpServlet {
 
     private static final String ERROR_PAGE = "error.jsp";
-    private static final String SEARCH_PAGE = "search.jsp";
+    private static final String SHOPPING_PAGE = "shopping.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,20 +36,25 @@ public class LoginServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         String url = ERROR_PAGE;
+        String teaStr = request.getParameter("cmbTea");
+        String tmp[] = teaStr.split("-");
+        String id = tmp[0];
+        String name = tmp[1];
+        double price = Double.parseDouble(tmp[2]);
+        int quantity = 1;
+        TeaDTO tea = new TeaDTO(id, name, quantity, price);
 
         try {
-            String userID = request.getParameter("userID");
-            String password = request.getParameter("password");
-            UserDAO dao = new UserDAO();
-            UserDTO dto = dao.checkLogin(userID, password);
             HttpSession session = request.getSession();
-            if (dto != null) {
-                session.setAttribute("LOGIN_USER", dto);
-                url = SEARCH_PAGE;
+            CartDTO cart = (CartDTO) session.getAttribute("CART");
+            if (cart == null) {
+                cart = new CartDTO();
             }
+            cart.add(tea);
+            session.setAttribute("CART", cart);
+            request.setAttribute("MESSAGE", "You bought " + name + " Successfully");
+            url = SHOPPING_PAGE;
         } catch (Exception e) {
-            String errMsg = e.getMessage();
-            log("LoginServlet _ SQL: " + errMsg);
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
