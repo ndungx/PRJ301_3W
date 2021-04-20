@@ -16,8 +16,8 @@
         <error-code>404</error-code>
         <location>/PageNotFound.html</location>
     </error-page>
-<!--    <error-page>
+    <error-page>
         <error-code>500</error-code>
         <location>/InternalServerError.html</location>
-    </error-page>-->
+    </error-page>
 </web-app>

@@ -103,7 +103,7 @@
                                 <br>
                                 <span class="createNewAccount">
                                     Already have account?
-                                    <a href="index.html"><b>&nbspSign in here</b></a>
+                                    <a href="index.html"><b>&nbsp;Sign in here</b></a>
                                 </span>
                             </div>
                         </div>

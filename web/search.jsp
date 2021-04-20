@@ -16,7 +16,6 @@
     </head>
     <body>
         <c:set var="loginUser" value="${sessionScope.LOGIN_USER.fullname}"/>
-
         <c:if test="${empty loginUser}">
             <a href="index.html">Please Login First</a>
         </c:if>
@@ -88,7 +87,6 @@
             </c:if>
         </c:if>
     </c:if>
-
 
     <%-- <%
          UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
