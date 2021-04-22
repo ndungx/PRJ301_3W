@@ -1,6 +1,7 @@
 package com.ndungx.controller;
 
 import com.ndungx.daos.UserDAO;
+import com.ndungx.dtos.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -11,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /*
  * @author NDungx
@@ -37,11 +39,22 @@ public class DeleteServlet extends HttpServlet {
 
         String url = ERROR_PAGE;
         String userID = request.getParameter("userID");
+        HttpSession session = request.getSession();
+        UserDTO loginUser = ((UserDTO) session.getAttribute("LOGIN_USER"));
+        String loginUserID = "";
+        if (loginUser != null) {
+            loginUserID = loginUser.getUserID();
+        }
         UserDAO dao = new UserDAO();
 
         try {
-            boolean check = dao.deleteAccount(userID);
-            if (check) {
+            if (!loginUserID.equals(userID)) {
+                boolean check = dao.deleteAccount(userID);
+                if (check) {
+                    url = SEARCH_CONTROLLER;
+                }
+            } else {
+                request.setAttribute("DELETE_USER", "User is logging in");
                 url = SEARCH_CONTROLLER;
             }
         } catch (SQLException ex) {

@@ -3,6 +3,7 @@ package com.ndungx.controller;
 import com.ndungx.daos.UserDAO;
 import com.ndungx.dtos.CreateErrorDTO;
 import com.ndungx.dtos.UserDTO;
+import com.ndungx.valivation.Validation;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -40,11 +41,14 @@ public class CreateServlet extends HttpServlet {
         String userID = request.getParameter("userID");
         String fullname = request.getParameter("fullname");
         String roleID = request.getParameter("roleID");
+        String phone = request.getParameter("phone");
+        String email = request.getParameter("email");
+        String address = request.getParameter("address");
         String password = request.getParameter("password");
         String confirm = request.getParameter("confirm");
         String url = CREATE_PAGE;
         UserDAO dao = new UserDAO();
-        CreateErrorDTO error = new CreateErrorDTO("", "", "", "", "");
+        CreateErrorDTO error = new CreateErrorDTO("", "", "", "", "", "", "", "");
         boolean check = false;
 
         try {
@@ -60,9 +64,25 @@ public class CreateServlet extends HttpServlet {
                 check = true;
                 error.setRoleIDError("role ID must be > 2 and < 10");
             }
-            if (roleID.length() < 2 || roleID.length() > 10) {
+            if (!Validation.isValidPhoneNumber(phone)) {
                 check = true;
-                error.setRoleIDError("role ID must be > 2 and < 10");
+                error.setPhoneError("phone number invalid");
+            }
+            if (phone.length() < 10 || phone.length() > 12) {
+                check = true;
+                error.setPhoneError("phone must be > 10 and < 12");
+            }
+            if (!Validation.isValidEmail(email)) {
+                check = true;
+                error.setEmailError("email invalid");
+            }
+            if (email.length() < 2 || email.length() > 10) {
+                check = true;
+                error.setEmailError("email must be > 2 and < 10");
+            }
+            if (address.length() < 4 || address.length() > 50) {
+                check = true;
+                error.setAddressError("address must be > 4 and < 50");
             }
             if (password.length() < 4 || password.length() > 20) {
                 check = true;
@@ -79,7 +99,7 @@ public class CreateServlet extends HttpServlet {
                     error.setUserIDError("user ID is duplicate");
                     request.setAttribute("ERROR", error);
                 } else {
-                    UserDTO dto = new UserDTO(userID, fullname, roleID, password);
+                    UserDTO dto = new UserDTO(userID, fullname, roleID, phone, email, address, password);
                     dao.createAccount(dto);
                     url = LOGIN_PAGE;
                 }

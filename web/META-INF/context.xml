@@ -2,6 +2,6 @@
 <Context path="/PRJ301_3W">
     <Resource name="DS" auth="Container" type="javax.sql.DataSource"
               driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
-              url="jdbc:sqlserver://localhost:1433;databaseName=UserManagement"
+              url="jdbc:sqlserver://localhost:1433;databaseName=FlowerManagement"
               username="sa" password="123456789"/>
 </Context>

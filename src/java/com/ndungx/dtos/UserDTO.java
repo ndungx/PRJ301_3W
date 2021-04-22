@@ -10,15 +10,21 @@ public class UserDTO implements Serializable {
     private String userID;
     private String fullname;
     private String roleID;
+    private String phone;
+    private String email;
+    private String address;
     private String password;
 
     public UserDTO() {
     }
 
-    public UserDTO(String userID, String fullname, String roleID, String password) {
+    public UserDTO(String userID, String fullname, String roleID, String phone, String email, String address, String password) {
         this.userID = userID;
         this.fullname = fullname;
         this.roleID = roleID;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
         this.password = password;
     }
 
@@ -62,6 +68,48 @@ public class UserDTO implements Serializable {
      */
     public void setRoleID(String roleID) {
         this.roleID = roleID;
+    }
+
+    /**
+     * @return the phone
+     */
+    public String getPhone() {
+        return phone;
+    }
+
+    /**
+     * @param phone the phone to set
+     */
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * @return the address
+     */
+    public String getAddress() {
+        return address;
+    }
+
+    /**
+     * @param address the address to set
+     */
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     /**

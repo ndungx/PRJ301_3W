@@ -1,6 +1,5 @@
 package com.ndungx.dtos;
 
-
 import java.io.Serializable;
 
 /*
@@ -11,16 +10,22 @@ public class CreateErrorDTO implements Serializable {
     private String userIDError;
     private String fullnameError;
     private String roleIDError;
+    private String phoneError;
+    private String emailError;
+    private String addressError;
     private String passwordError;
     private String confirmError;
 
     public CreateErrorDTO() {
     }
 
-    public CreateErrorDTO(String userIDError, String fullnameError, String roleIDError, String passwordError, String confirmError) {
+    public CreateErrorDTO(String userIDError, String fullnameError, String roleIDError, String phoneError, String emailError, String addressError, String passwordError, String confirmError) {
         this.userIDError = userIDError;
         this.fullnameError = fullnameError;
         this.roleIDError = roleIDError;
+        this.phoneError = phoneError;
+        this.emailError = emailError;
+        this.addressError = addressError;
         this.passwordError = passwordError;
         this.confirmError = confirmError;
     }
@@ -65,6 +70,48 @@ public class CreateErrorDTO implements Serializable {
      */
     public void setRoleIDError(String roleIDError) {
         this.roleIDError = roleIDError;
+    }
+
+    /**
+     * @return the phoneError
+     */
+    public String getPhoneError() {
+        return phoneError;
+    }
+
+    /**
+     * @param phoneError the phoneError to set
+     */
+    public void setPhoneError(String phoneError) {
+        this.phoneError = phoneError;
+    }
+
+    /**
+     * @return the emailError
+     */
+    public String getEmailError() {
+        return emailError;
+    }
+
+    /**
+     * @param emailError the emailError to set
+     */
+    public void setEmailError(String emailError) {
+        this.emailError = emailError;
+    }
+
+    /**
+     * @return the addressError
+     */
+    public String getAddressError() {
+        return addressError;
+    }
+
+    /**
+     * @param addressError the addressError to set
+     */
+    public void setAddressError(String addressError) {
+        this.addressError = addressError;
     }
 
     /**

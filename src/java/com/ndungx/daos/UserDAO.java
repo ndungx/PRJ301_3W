@@ -26,7 +26,7 @@ public class UserDAO implements Serializable {
         try {
             con = DBUtils.makeConnection();
             if (con != null) {
-                String sql = "select fullname, roleID "
+                String sql = "select fullname, roleID, phone, email, address "
                         + "from tblUser "
                         + "where userID = ? and password = ?";
                 stm = con.prepareStatement(sql);
@@ -36,7 +36,10 @@ public class UserDAO implements Serializable {
                 if (rs.next()) {
                     String fullname = rs.getString("fullname");
                     String roleID = rs.getString("roleID");
-                    user = new UserDTO(userID, fullname, roleID, "");
+                    String phone = rs.getString("phone");
+                    String email = rs.getString("email");
+                    String address = rs.getString("address");
+                    user = new UserDTO(userID, fullname, roleID, phone, email, address, "");
                 }
             }
         } finally {
@@ -67,7 +70,7 @@ public class UserDAO implements Serializable {
         try {
             con = DBUtils.makeConnection();
             if (con != null) {
-                String sql = "select userID, fullname, roleID "
+                String sql = "select userID, fullname, roleID, phone, email, address "
                         + "from tblUser "
                         + "where fullname like ?";
                 stm = con.prepareStatement(sql);
@@ -77,9 +80,11 @@ public class UserDAO implements Serializable {
                     String userID = rs.getString("userID");
                     String fullname = rs.getString("fullname");
                     String roleID = rs.getString("roleID");
+                    String phone = rs.getString("phone");
+                    String email = rs.getString("email");
+                    String address = rs.getString("address");
                     String password = "******";
-                    
-                    UserDTO dto = new UserDTO(userID, fullname, roleID, password);
+                    UserDTO dto = new UserDTO(userID, fullname, roleID, phone, email, address, password);
                     if (this.listAccount == null) {
                         this.listAccount = new ArrayList<>();
                     }

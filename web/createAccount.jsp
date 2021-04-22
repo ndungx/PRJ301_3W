@@ -67,6 +67,42 @@
                                 </c:if>
 
                                 <div class="form-label-group">
+                                    <input type="phone" id="inputPhone" 
+                                           name="phone" class="form-control" 
+                                           placeholder="Phone" required>
+                                    <label for="inputPhone">Phone</label>
+                                </div>
+                                <c:if test="${not empty error.phonedError}">
+                                    <font color="red">
+                                    ${error.phoneError}<br>
+                                    </font>
+                                </c:if>
+
+                                <div class="form-label-group">
+                                    <input type="email" id="inputEmail" 
+                                           name="email" class="form-control" 
+                                           placeholder="Email" required>
+                                    <label for="inputEmail">Password</label>
+                                </div>
+                                <c:if test="${not empty error.emailError}">
+                                    <font color="red">
+                                    ${error.emaildError}<br>
+                                    </font>
+                                </c:if>
+
+                                <div class="form-label-group">
+                                    <input type="address" id="inputAddress" 
+                                           name="address" class="form-control" 
+                                           placeholder="Address" required>
+                                    <label for="inputAddress">Address</label>
+                                </div>
+                                <c:if test="${not empty error.addressError}">
+                                    <font color="red">
+                                    ${error.addressError}<br>
+                                    </font>
+                                </c:if>
+
+                                <div class="form-label-group">
                                     <input type="password" id="inputPassword" 
                                            name="password" class="form-control" 
                                            placeholder="Password" required>

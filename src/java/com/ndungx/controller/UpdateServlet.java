@@ -37,8 +37,11 @@ public class UpdateServlet extends HttpServlet {
         String userID = request.getParameter("userID");
         String fullname = request.getParameter("fullname");
         String roleID = request.getParameter("roleID");
+        String phone = request.getParameter("phone");
+        String email = request.getParameter("email");
+        String address = request.getParameter("address");
         String password = "";
-        UserDTO dto = new UserDTO(userID, fullname, roleID, password);
+        UserDTO dto = new UserDTO(userID, fullname, roleID, phone, email, address, password);
         UserDAO dao = new UserDAO();
 
         String url = ERROR_PAGE;

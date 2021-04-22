@@ -1,0 +1,67 @@
+/* 
+    Created on : Apr 22, 2021, 12:28:29 AM
+    Author     : NDungx
+*/
+
+*[role="form"] {
+    padding: 5%;
+    margin: 0 auto;
+    border-radius: 0.3em;
+    background-color: #f2f2f2;
+}
+
+*[role="form"] h2 {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 40px;
+    font-weight: 600;
+    color: #000000;
+    margin-top: 1%;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+}
+
+.box {
+    padding: 0% 5% 5% 5%;
+}
+
+.upper {
+    margin-bottom: 3%;
+}
+
+#search {
+    width: 300px;
+    height: 39px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 3px #fff, 0 10px 15px #ebebeb inset;
+    font-size: 14px;
+    padding-left: 10px;
+}
+
+#addButton{
+    display: block;
+    width: 200px;
+    transition: .2s;
+    box-shadow: 0 0 0.5rem rgb(0 0 0 / 30%);
+    text-align: center;
+    float: right;
+    font-size: 18px;
+}
+
+.center {
+    text-align: center;
+}
+
+table tr:not(:first-child) {
+    cursor: pointer;
+    transition: all .25s;
+}
+
+table tr:not(:first-child):hover {
+    background-color: #D9EAFF;
+}
+
+.required-field {
+    color: red;
+}
