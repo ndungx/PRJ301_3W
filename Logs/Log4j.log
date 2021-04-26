@@ -1,0 +1,4 @@
+INFO    2021-04-26 21:27:21,582 [http-nio-8084-exec-3] com.ndungx.log4j.TestLog4jServlet  - Initialized Log4j
+INFO    2021-04-26 21:27:21,963 [http-nio-8084-exec-4] com.ndungx.log4j.TestLog4jServlet  - Initialized Log4j
+INFO    2021-04-26 21:44:10,106 [http-nio-8084-exec-1] com.ndungx.log4j.TestLog4jServlet  - Initialized Log4j
+INFO    2021-04-26 21:44:10,425 [http-nio-8084-exec-3] com.ndungx.log4j.TestLog4jServlet  - Initialized Log4j

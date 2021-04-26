@@ -130,7 +130,9 @@ values('james',CURRENT_TIMESTAMP,1000000,'123/5 đường kha vạn cân');
 delete from [Order] where userID = 'james'
 DBCC CHECKIDENT ('[Order]', RESEED, 0);
 
-delete from [OrderDetail] where productID = 1;
+delete from [OrderDetail] where productID = 3;
+
+delete from [OrderDetail] where orderID = 8;
 
 select * from [User] where userID = 'james'
 
@@ -149,3 +151,11 @@ where [productID] = 1
 select max(orderID) as orderID 
 from dbo.[Order] 
 where userID = 'james'
+
+select [date] as [date]
+from dbo.[Order] 
+where orderID = 6
+
+select [productName] as [productName]
+from dbo.[Product] 
+where productID = 1

@@ -32,7 +32,7 @@
                                 <c:set var="error" value="${requestScope.ERROR}"/>
                                 <div class="form-label-group">
                                     <input type="text" id="inputUserID" 
-                                           name="userID" class="form-control" 
+                                           name="userID" value="${param.userID}" class="form-control" 
                                            placeholder="User ID" required autofocus>
                                     <label for="inputUserID">User ID <span class="required-field">*</span></label>
                                 </div>
@@ -44,7 +44,7 @@
 
                                 <div class="form-label-group">
                                     <input type="text" id="inputFullName" 
-                                           name="fullname" class="form-control" 
+                                           name="fullname" value="${param.fullname}" class="form-control" 
                                            placeholder="Full Name" required autofocus>
                                     <label for="inputFullName">Full name <span class="required-field">*</span></label>
                                 </div>
@@ -56,11 +56,11 @@
 
                                 <div class="form-label-group">
                                     <input type="phone" id="inputPhone" 
-                                           name="phone" class="form-control" 
+                                           name="phone" value="${param.phone}" class="form-control" 
                                            placeholder="Phone Number" required>
                                     <label for="inputPhoneNumber">Phone Number <span class="required-field">*</span></label>
                                 </div>
-                                <c:if test="${not empty error.phonedError}">
+                                <c:if test="${not empty error.phoneError}">
                                     <font color="red">
                                     ${error.phoneError}<br>
                                     </font>
@@ -68,19 +68,19 @@
 
                                 <div class="form-label-group">
                                     <input type="email" id="inputEmail" 
-                                           name="email" class="form-control" 
+                                           name="email" value="${param.email}" class="form-control" 
                                            placeholder="Email" required>
-                                    <label for="inputEmail">Password <span class="required-field">*</span></label>
+                                    <label for="inputEmail">Email <span class="required-field">*</span></label>
                                 </div>
                                 <c:if test="${not empty error.emailError}">
                                     <font color="red">
-                                    ${error.emaildError}<br>
+                                    ${error.emailError}<br>
                                     </font>
                                 </c:if>
 
                                 <div class="form-label-group">
                                     <input type="address" id="inputAddress" 
-                                           name="address" class="form-control" 
+                                           name="address" value="${param.address}" class="form-control" 
                                            placeholder="Address" required>
                                     <label for="inputAddress">Address <span class="required-field">*</span></label>
                                 </div>
