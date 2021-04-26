@@ -1,7 +1,6 @@
 package com.ndungx.controller;
 
-import com.ndungx.dtos.CartDTO;
-import com.ndungx.dtos.TeaDTO;
+import com.ndungx.product.ProductDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -19,7 +18,7 @@ import javax.servlet.http.HttpSession;
 public class AddServlet extends HttpServlet {
 
     private static final String ERROR_PAGE = "error.jsp";
-    private static final String SHOPPING_PAGE = "shopping.jsp";
+    private static final String SHOPPING_PAGE = "GetProductServlet";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,25 +35,33 @@ public class AddServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         String url = ERROR_PAGE;
-        String teaStr = request.getParameter("cmbTea");
-        String tmp[] = teaStr.split("-");
-        String id = tmp[0];
-        String name = tmp[1];
-        double price = Double.parseDouble(tmp[2]);
-        int quantity = 1;
-        TeaDTO tea = new TeaDTO(id, name, quantity, price);
+        String productID = request.getParameter("productID");
+        String productName = request.getParameter("productName");
+        String price = request.getParameter("price");
+        String quantity = request.getParameter("quantity");
+        String categoryID = request.getParameter("categoryID");
+        String image = request.getParameter("image");
+        ProductDTO dto
+                = new ProductDTO(
+                        Integer.parseInt(productID),
+                        productName,
+                        Float.parseFloat(price),
+                        Integer.parseInt(quantity),
+                        Integer.parseInt(categoryID),
+                        image);
 
         try {
             HttpSession session = request.getSession();
-            CartDTO cart = (CartDTO) session.getAttribute("CART");
+            CartObj cart = (CartObj) session.getAttribute("CART");
             if (cart == null) {
-                cart = new CartDTO();
+                cart = new CartObj();
             }
-            cart.add(tea);
+            cart.add(dto);
             session.setAttribute("CART", cart);
-            request.setAttribute("MESSAGE", "You bought " + name + " Successfully");
+            request.setAttribute("MESSAGE", "You bought " + productName + " Successfully");
             url = SHOPPING_PAGE;
         } catch (Exception e) {
+            log("CreateServlet: " + e.getMessage());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

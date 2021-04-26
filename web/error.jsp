@@ -9,9 +9,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title></title>
+        <title>Error</title>
     </head>
     <body>
-        <h1></h1>
+        <div style="display: flex; align-items: center; flex-direction: column;">
+            <h1>Something went wrong</h1>
+            <a href="#" onclick="location.href = document.referrer; return false;">Back</a>
+        </div>
     </body>
 </html>

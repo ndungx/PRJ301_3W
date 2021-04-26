@@ -1,4 +1,4 @@
-package stackjava.com.accessgoogle.common;
+package com.ndungx.accessgoogle.common;
 
 public class Constants {
 	public static String GOOGLE_CLIENT_ID = "225456220013-28j92le9f9urd61mjsc1vd8khnc1vuad.apps.googleusercontent.com";

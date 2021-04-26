@@ -34,7 +34,7 @@
                                     <input type="text" id="inputUserID" 
                                            name="userID" class="form-control" 
                                            placeholder="User ID" required autofocus>
-                                    <label for="inputUserID">User ID</label>
+                                    <label for="inputUserID">User ID <span class="required-field">*</span></label>
                                 </div>
                                 <c:if test="${not empty error.userIDError}">
                                     <font color="red">
@@ -46,7 +46,7 @@
                                     <input type="text" id="inputFullName" 
                                            name="fullname" class="form-control" 
                                            placeholder="Full Name" required autofocus>
-                                    <label for="inputFullName">Full name</label>
+                                    <label for="inputFullName">Full name <span class="required-field">*</span></label>
                                 </div>
                                 <c:if test="${not empty error.fullnameError}">
                                     <font color="red">
@@ -55,22 +55,10 @@
                                 </c:if>
 
                                 <div class="form-label-group">
-                                    <input type="text" id="inputRoleID" 
-                                           name="roleID" class="form-control" 
-                                           placeholder="Role ID" required autofocus>
-                                    <label for="inputRoleID">Role ID</label>
-                                </div>
-                                <c:if test="${not empty error.roleIDError}">
-                                    <font color="red">
-                                    ${error.roleIDError}<br>
-                                    </font>
-                                </c:if>
-
-                                <div class="form-label-group">
                                     <input type="phone" id="inputPhone" 
                                            name="phone" class="form-control" 
-                                           placeholder="Phone" required>
-                                    <label for="inputPhone">Phone</label>
+                                           placeholder="Phone Number" required>
+                                    <label for="inputPhoneNumber">Phone Number <span class="required-field">*</span></label>
                                 </div>
                                 <c:if test="${not empty error.phonedError}">
                                     <font color="red">
@@ -82,7 +70,7 @@
                                     <input type="email" id="inputEmail" 
                                            name="email" class="form-control" 
                                            placeholder="Email" required>
-                                    <label for="inputEmail">Password</label>
+                                    <label for="inputEmail">Password <span class="required-field">*</span></label>
                                 </div>
                                 <c:if test="${not empty error.emailError}">
                                     <font color="red">
@@ -94,7 +82,7 @@
                                     <input type="address" id="inputAddress" 
                                            name="address" class="form-control" 
                                            placeholder="Address" required>
-                                    <label for="inputAddress">Address</label>
+                                    <label for="inputAddress">Address <span class="required-field">*</span></label>
                                 </div>
                                 <c:if test="${not empty error.addressError}">
                                     <font color="red">
@@ -106,7 +94,7 @@
                                     <input type="password" id="inputPassword" 
                                            name="password" class="form-control" 
                                            placeholder="Password" required>
-                                    <label for="inputPassword">Password</label>
+                                    <label for="inputPassword">Password <span class="required-field">*</span></label>
                                 </div>
                                 <c:if test="${not empty error.passwordError}">
                                     <font color="red">
@@ -118,7 +106,7 @@
                                     <input type="password" id="inputConfirmPassword" 
                                            name="confirm" class="form-control" 
                                            placeholder="Confirm password" required>
-                                    <label for="inputConfirmPassword">Confirm password</label>
+                                    <label for="inputConfirmPassword">Confirm password <span class="required-field">*</span></label>
                                 </div>
                                 <c:if test="${not empty error.confirmError}">
                                     <font color="red">

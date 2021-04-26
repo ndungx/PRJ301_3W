@@ -1,4 +1,4 @@
-package com.ndungx.dtos;
+package com.ndungx.user;
 
 import java.io.Serializable;
 
@@ -10,22 +10,22 @@ public class UserDTO implements Serializable {
     private String userID;
     private String fullname;
     private String roleID;
+    private String password;
     private String phone;
     private String email;
     private String address;
-    private String password;
 
     public UserDTO() {
     }
 
-    public UserDTO(String userID, String fullname, String roleID, String phone, String email, String address, String password) {
+    public UserDTO(String userID, String fullname, String roleID, String password, String phone, String email, String address) {
         this.userID = userID;
         this.fullname = fullname;
         this.roleID = roleID;
+        this.password = password;
         this.phone = phone;
         this.email = email;
         this.address = address;
-        this.password = password;
     }
 
     /**

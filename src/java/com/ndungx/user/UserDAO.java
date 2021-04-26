@@ -1,6 +1,6 @@
-package com.ndungx.daos;
+package com.ndungx.user;
 
-import com.ndungx.dtos.UserDTO;
+import com.ndungx.user.UserDTO;
 import com.ndungx.utils.DBUtils;
 import java.io.Serializable;
 import java.sql.Connection;
@@ -27,7 +27,7 @@ public class UserDAO implements Serializable {
             con = DBUtils.makeConnection();
             if (con != null) {
                 String sql = "select fullname, roleID, phone, email, address "
-                        + "from tblUser "
+                        + "from [User] "
                         + "where userID = ? and password = ?";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, userID);
@@ -39,18 +39,18 @@ public class UserDAO implements Serializable {
                     String phone = rs.getString("phone");
                     String email = rs.getString("email");
                     String address = rs.getString("address");
-                    user = new UserDTO(userID, fullname, roleID, phone, email, address, "");
+                    user = new UserDTO(userID, fullname, roleID, "", phone, email, address);
                 }
             }
         } finally {
-            if (con != null) {
-                con.close();
+            if (rs != null) {
+                rs.close();
             }
             if (stm != null) {
                 stm.close();
             }
-            if (rs != null) {
-                rs.close();
+            if (con != null) {
+                con.close();
             }
         }
         return user;
@@ -71,7 +71,7 @@ public class UserDAO implements Serializable {
             con = DBUtils.makeConnection();
             if (con != null) {
                 String sql = "select userID, fullname, roleID, phone, email, address "
-                        + "from tblUser "
+                        + "from [User] "
                         + "where fullname like ?";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, "%" + search + "%");
@@ -80,11 +80,11 @@ public class UserDAO implements Serializable {
                     String userID = rs.getString("userID");
                     String fullname = rs.getString("fullname");
                     String roleID = rs.getString("roleID");
+                    String password = "******";
                     String phone = rs.getString("phone");
                     String email = rs.getString("email");
                     String address = rs.getString("address");
-                    String password = "******";
-                    UserDTO dto = new UserDTO(userID, fullname, roleID, phone, email, address, password);
+                    UserDTO dto = new UserDTO(userID, fullname, roleID, password, phone, email, address);
                     if (this.listAccount == null) {
                         this.listAccount = new ArrayList<>();
                     }
@@ -92,14 +92,14 @@ public class UserDAO implements Serializable {
                 }
             }
         } finally {
-            if (con != null) {
-                con.close();
+            if (rs != null) {
+                rs.close();
             }
             if (stm != null) {
                 stm.close();
             }
-            if (rs != null) {
-                rs.close();
+            if (con != null) {
+                con.close();
             }
         }
         return listAccount;
@@ -114,7 +114,7 @@ public class UserDAO implements Serializable {
         try {
             con = DBUtils.makeConnection();
             if (con != null) {
-                String sql = "delete from tblUser "
+                String sql = "delete from [User] "
                         + "where userID = ?";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, userID);
@@ -140,7 +140,7 @@ public class UserDAO implements Serializable {
         try {
             con = DBUtils.makeConnection();
             if (con != null) {
-                String sql = "update tblUser "
+                String sql = "update [User] "
                         + "set fullname = ?, roleID = ? "
                         + "where userID = ?";
                 stm = con.prepareStatement(sql);
@@ -150,11 +150,11 @@ public class UserDAO implements Serializable {
                 check = stm.executeUpdate() == 0 ? false : true;
             }
         } finally {
-            if (con != null) {
-                con.close();
-            }
             if (stm != null) {
                 stm.close();
+            }
+            if (con != null) {
+                con.close();
             }
         }
         return check;
@@ -171,7 +171,7 @@ public class UserDAO implements Serializable {
             con = DBUtils.makeConnection();
             if (con != null) {
                 String sql = "select userID "
-                        + "from tblUser "
+                        + "from [User] "
                         + "where userID = ?";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, userID);
@@ -181,14 +181,14 @@ public class UserDAO implements Serializable {
                 }
             }
         } finally {
-            if (con != null) {
-                con.close();
+            if (rs != null) {
+                rs.close();
             }
             if (stm != null) {
                 stm.close();
             }
-            if (rs != null) {
-                rs.close();
+            if (con != null) {
+                con.close();
             }
         }
         return check;
@@ -204,27 +204,30 @@ public class UserDAO implements Serializable {
         try {
             con = DBUtils.makeConnection();
             if (con != null) {
-                String sql = "insert into tblUser(userID, fullname, roleID, [password]) "
-                        + "values(?,?,?,?)";
+                String sql = "insert into dbo.[User](userID, fullname, roleID, [password], phone, email, [address]) "
+                        + "values(?, ?, ?, ?, ?, ?, ?)";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, dto.getUserID());
                 stm.setString(2, dto.getFullname());
                 stm.setString(3, dto.getRoleID());
                 stm.setString(4, dto.getPassword());
+                stm.setString(5, dto.getPhone());
+                stm.setString(6, dto.getEmail());
+                stm.setString(7, dto.getAddress());
                 check = stm.executeUpdate() == 0 ? false : true;
                 if (rs.next()) {
                     check = true;
                 }
             }
         } finally {
-            if (con != null) {
-                con.close();
+            if (rs != null) {
+                rs.close();
             }
             if (stm != null) {
                 stm.close();
             }
-            if (rs != null) {
-                rs.close();
+            if (con != null) {
+                con.close();
             }
         }
         return check;

@@ -1,6 +1,5 @@
 package com.ndungx.controller;
 
-import com.ndungx.dtos.CartDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -35,13 +34,13 @@ public class RemoveServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         String url = ERROR_PAGE;
-        String id = request.getParameter("id");
+        String productID = request.getParameter("productID");
 
         try {
             HttpSession session = request.getSession();
-            CartDTO cart = (CartDTO) session.getAttribute("CART");
+            CartObj cart = (CartObj) session.getAttribute("CART");
             if (cart != null) {
-                cart.delete(id);
+                cart.delete(Integer.parseInt(productID));
                 session.setAttribute("CART", cart);
                 url = VIEW_CART_PAGE;
             }

@@ -1,12 +1,15 @@
 package com.ndungx.controller;
 
-import com.ndungx.daos.UserDAO;
-import com.ndungx.dtos.UserDTO;
+import com.ndungx.user.UserDAO;
+import com.ndungx.user.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,8 +21,9 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
 
-    private static final String ERROR_PAGE = "error.jsp";
+    private static final String ERROR_PAGE = "loginfail.html";
     private static final String SEARCH_PAGE = "search.jsp";
+    private static final String SHOPPING_PAGE = "GetProductServlet";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,21 +39,34 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
+        String userID = request.getParameter("userID");
+        String password = request.getParameter("password");
+        UserDAO dao = new UserDAO();
+
         String url = ERROR_PAGE;
 
         try {
-            String userID = request.getParameter("userID");
-            String password = request.getParameter("password");
-            UserDAO dao = new UserDAO();
             UserDTO dto = dao.checkLogin(userID, password);
             HttpSession session = request.getSession();
+            
+            Cookie cookie = new Cookie(userID, password);
+            cookie.setMaxAge(60 * 3);
+            response.addCookie(cookie);
+            
             if (dto != null) {
                 session.setAttribute("LOGIN_USER", dto);
                 url = SEARCH_PAGE;
+                if (dto.getRoleID().equals("AD")) {
+                    url = SEARCH_PAGE;
+                }
+                if (dto.getRoleID().equals("G")) {
+                    url = SHOPPING_PAGE;
+                }
             }
-        } catch (Exception e) {
-            String errMsg = e.getMessage();
-            log("LoginServlet _ SQL: " + errMsg);
+        } catch (SQLException e) {
+            log("LoginServlet _ SQL: " + e.getMessage());
+        } catch (NamingException e) {
+            log("LoginServlet _ Naming: " + e.getMessage());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

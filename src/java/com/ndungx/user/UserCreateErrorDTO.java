@@ -1,11 +1,11 @@
-package com.ndungx.dtos;
+package com.ndungx.user;
 
 import java.io.Serializable;
 
 /*
  * @author NDungx
  */
-public class CreateErrorDTO implements Serializable {
+public class UserCreateErrorDTO implements Serializable {
 
     private String userIDError;
     private String fullnameError;
@@ -15,11 +15,12 @@ public class CreateErrorDTO implements Serializable {
     private String addressError;
     private String passwordError;
     private String confirmError;
+    private String userIDDuplicateError;
 
-    public CreateErrorDTO() {
+    public UserCreateErrorDTO() {
     }
 
-    public CreateErrorDTO(String userIDError, String fullnameError, String roleIDError, String phoneError, String emailError, String addressError, String passwordError, String confirmError) {
+    public UserCreateErrorDTO(String userIDError, String fullnameError, String roleIDError, String phoneError, String emailError, String addressError, String passwordError, String confirmError, String userIDDuplicateError) {
         this.userIDError = userIDError;
         this.fullnameError = fullnameError;
         this.roleIDError = roleIDError;
@@ -28,6 +29,7 @@ public class CreateErrorDTO implements Serializable {
         this.addressError = addressError;
         this.passwordError = passwordError;
         this.confirmError = confirmError;
+        this.userIDDuplicateError = userIDDuplicateError;
     }
 
     /**
@@ -140,6 +142,20 @@ public class CreateErrorDTO implements Serializable {
      */
     public void setConfirmError(String confirmError) {
         this.confirmError = confirmError;
+    }
+
+    /**
+     * @return the userIDDuplicateError
+     */
+    public String getUserIDDuplicateError() {
+        return userIDDuplicateError;
+    }
+
+    /**
+     * @param userIDDuplicateError the userIDDuplicateError to set
+     */
+    public void setUserIDDuplicateError(String userIDDuplicateError) {
+        this.userIDDuplicateError = userIDDuplicateError;
     }
 
 }

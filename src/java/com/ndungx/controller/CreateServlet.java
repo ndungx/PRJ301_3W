@@ -1,8 +1,8 @@
 package com.ndungx.controller;
 
-import com.ndungx.daos.UserDAO;
-import com.ndungx.dtos.CreateErrorDTO;
-import com.ndungx.dtos.UserDTO;
+import com.ndungx.user.UserDAO;
+import com.ndungx.user.UserCreateErrorDTO;
+import com.ndungx.user.UserDTO;
 import com.ndungx.valivation.Validation;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -40,7 +40,7 @@ public class CreateServlet extends HttpServlet {
 
         String userID = request.getParameter("userID");
         String fullname = request.getParameter("fullname");
-        String roleID = request.getParameter("roleID");
+        String roleID = "G";
         String phone = request.getParameter("phone");
         String email = request.getParameter("email");
         String address = request.getParameter("address");
@@ -48,7 +48,7 @@ public class CreateServlet extends HttpServlet {
         String confirm = request.getParameter("confirm");
         String url = CREATE_PAGE;
         UserDAO dao = new UserDAO();
-        CreateErrorDTO error = new CreateErrorDTO("", "", "", "", "", "", "", "");
+        UserCreateErrorDTO error = new UserCreateErrorDTO("", "", "", "", "", "", "", "", "");
         boolean check = false;
 
         try {
@@ -59,10 +59,6 @@ public class CreateServlet extends HttpServlet {
             if (fullname.length() < 5 || fullname.length() > 50) {
                 check = true;
                 error.setFullnameError("full name must be > 5 and < 50");
-            }
-            if (roleID.length() < 2 || roleID.length() > 10) {
-                check = true;
-                error.setRoleIDError("role ID must be > 2 and < 10");
             }
             if (!Validation.isValidPhoneNumber(phone)) {
                 check = true;
@@ -105,9 +101,14 @@ public class CreateServlet extends HttpServlet {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (NamingException ex) {
-            ex.printStackTrace();
+            String errMsg = e.getMessage();
+            log("CreateServlet _ SQL: " + errMsg);
+            if (errMsg.contains("duplicate")) {
+                error.setUserIDDuplicateError(userID + " is existed");
+                request.setAttribute("CREATE_ERROR", error);
+            }
+        } catch (NamingException e) {
+            log("CreateServlet _ Naming: " + e.getMessage());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

@@ -1,7 +1,6 @@
 package com.ndungx.controller;
 
-import com.ndungx.dtos.CartDTO;
-import com.ndungx.dtos.TeaDTO;
+import com.ndungx.product.ProductDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -36,22 +35,27 @@ public class EditServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         String url = ERROR_PAGE;
-        String id = request.getParameter("id");
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
+        String productID = request.getParameter("productID");
+        String quantity = request.getParameter("quantity");
 
         try {
             HttpSession session = request.getSession();
-            CartDTO cart = (CartDTO) session.getAttribute("CART");
-            TeaDTO teadto = null;
-            for (TeaDTO tea : cart.getCart().values()) {
-                if (tea.getId().equals(id)) {
-                    String name = tea.getName();
-                    double price = tea.getPrice();
-                    teadto = new TeaDTO(id, name, quantity, price);
+            CartObj cart = (CartObj) session.getAttribute("CART");
+            ProductDTO dto = null;
+            for (ProductDTO product : cart.getCart().values()) {
+                if (product.getProductID() == Integer.parseInt(productID)) {
+                    String productName = product.getProductName();
+                    float price = product.getPrice();
+                    int categoryID = product.getCategoryID();
+                    String image = product.getImage();
+                    dto = new ProductDTO(
+                            Integer.parseInt(productID), productName,
+                            price, Integer.parseInt(quantity),
+                            categoryID, image);
                     break;
                 }
             }
-            cart.update(id, teadto);
+            cart.update(Integer.parseInt(productID), dto);
             session.setAttribute("CART", cart);
             url = VIEW_CART_PAGE;
         } finally {

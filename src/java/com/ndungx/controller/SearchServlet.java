@@ -1,10 +1,12 @@
 package com.ndungx.controller;
 
-import com.ndungx.daos.UserDAO;
-import com.ndungx.dtos.UserDTO;
+import com.ndungx.user.UserDAO;
+import com.ndungx.user.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.List;
+import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -47,9 +49,10 @@ public class SearchServlet extends HttpServlet {
                     url = SEARCH_PAGE;
                 }
             }
-        } catch (Exception e) {
-            String errMsg = e.getMessage();
-            log("LoginServlet _ SQL: " + errMsg);
+        } catch (SQLException e) {
+            log("SearchServlet _ SQL: " + e.getMessage());
+        } catch (NamingException e) {
+            log("SearchServlet _ Naming: " + e.getMessage());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

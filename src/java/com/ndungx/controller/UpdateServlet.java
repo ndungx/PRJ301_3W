@@ -1,15 +1,19 @@
 package com.ndungx.controller;
 
-import com.ndungx.daos.UserDAO;
-import com.ndungx.dtos.UserDTO;
+import com.ndungx.user.UserDAO;
+import com.ndungx.user.UserDTO;
+import com.ndungx.user.UserUpdateErrorsDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /*
  * @author NDungx
@@ -43,16 +47,45 @@ public class UpdateServlet extends HttpServlet {
         String password = "";
         UserDTO dto = new UserDTO(userID, fullname, roleID, phone, email, address, password);
         UserDAO dao = new UserDAO();
+        UserUpdateErrorsDTO error = new UserUpdateErrorsDTO();
+        boolean foundErr = false;
 
         String url = ERROR_PAGE;
 
         try {
-            boolean check = dao.updateAccount(dto);
-            if (check) {
-                url = SEARCH_CONTROLLER;
+            HttpSession session = request.getSession();
+
+            if (fullname.length() < 5 || fullname.length() > 20) {
+                foundErr = true;
+                error.setFullnameLengthErr("full name must be > 5 and < 20");
             }
-        } catch (Exception e) {
-            e.getCause();
+            if (roleID.length() < 1 || roleID.length() > 10) {
+                foundErr = true;
+                error.setRoleIDLengthErr("role ID must be > 1 and < 10");
+            }
+            if (foundErr) {
+                session.setAttribute("UPDATE_ERROR", error);
+                session.setAttribute("UPDATE_ERROR_FULLNAME", fullname);
+                url = SEARCH_CONTROLLER;
+            } else {
+                UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+
+                boolean check = dao.updateAccount(dto);
+                if (check) {
+                    if (loginUser != null) {
+                        if (loginUser.getUserID().equals(userID)) {
+                            loginUser.setFullname(fullname);
+                            loginUser.setRoleID(roleID);
+                            request.setAttribute("LOGIN_USER", loginUser);
+                        }
+                    }
+                    url = SEARCH_CONTROLLER;
+                }
+            }
+        } catch (SQLException e) {
+            log("UpdateServlet _ SQL: " + e.getMessage());
+        } catch (NamingException e) {
+            log("UpdateServlet _ Naming: " + e.getMessage());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

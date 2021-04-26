@@ -5,7 +5,7 @@
 --%>
 
 <%@page import="java.util.List"%>
-<%@page import="com.ndungx.dtos.UserDTO"%>
+<%@page import="com.ndungx.user.UserDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
@@ -17,198 +17,171 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Employee Management</title>
+        <title>User Management</title>
         <meta name="description" content="CRUD">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/search.css">
-        <link href="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <link href="https://netdna.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous">
-
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-        <script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <div>
+        <c:set var="cookies" value="${cookie}"/>
+        <c:if test="${not empty cookies}">
+            <c:set var="username" value=""/>
+            <c:forEach var="cookie" items="${cookies}" >
+                <c:set var="temp" value="${cookie.value.name}" />
+                <c:if test="${temp != 'JSESSIONID'}">
+                    <c:set var="username" value="${temp}"/>
+                </c:if>
+            </c:forEach>
+            <c:if test="${username == ''}">
+                <jsp:forward page="StartupServlet" />
+            </c:if>
+        </c:if>
+        
+        <c:set var="loginUser" value="${sessionScope.LOGIN_USER.fullname}"/>
+        <c:set var="roleID" value="${sessionScope.LOGIN_USER.roleID}"/>
 
-        </div>
-        <div class="box">
-            <h1 style="text-align: center;padding: 1%;">User Management</h1>
-            <!-- Upper -->
-            <div class="upper">
-                <input type="text" placeholder="Search User" 
-                       id="search" name="btAction" value="Search">
-                <button type="button" class="btn btn-primary btn-block" 
-                        id="addButton" data-toggle="modal" 
-                        data-target="#addnewModal"><i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Add</button>
-            </div>
-            
-            <!-- Middle -->
-            <!-- Create -->
-            <div class="modal fade" id="addnewModal" tabindex="-1" role="dialog" aria-labelledby="addnewModalTitle" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="addnewModalTitle">Add Employee</h4>
-                        </div>
+        <c:if test="${roleID ne 'AD'}">
+            <a href="index.html">Permission Denied</a>
+        </c:if>
+        <c:if test="${empty loginUser}">
+            <a href="index.html">Please Login First</a>
+        </c:if>
 
-                        <div class="modal-body">
-                            <div class="modal-body">
-                                <form id="input_form" onsubmit="createEmployeeInfo(); return false;">
-                                    <!-- Full name -->
-                                    <div class="form-group">
-                                        <label for="full_name">Full Name <span class="required-field">*</span></label>
-                                        <input type="text" class="form-control" placeholder="Enter Full Name" id="full_name" required />
-                                    </div>
+        <c:if test="${not empty loginUser and roleID eq 'AD'}">
+            <jsp:include page="header.jsp"></jsp:include>
+                <div class="box">
+                    <!-- Upper -->
+                    <div class="upper">
+                        <h1>User Management</h1>
 
-                                    <!-- Age -->
-                                    <div class="form-group">
-                                        <label for="age">Age<span class="required-field">*</span></label>
-                                        <input type="number" min="18" max="60" class="form-control" placeholder="Enter Age" id="age" required />
-                                    </div>
-
-                                    <!-- Address -->
-                                    <div class="form-group">
-                                        <label for="address">Address <span class="required-field">*</span></label>
-                                        <input type="address" class="form-control" placeholder="Enter Address" id="address" name="address" required>
-                                    </div>
-
-                                    <!-- Year of Experience -->
-                                    <div class="form-group">
-                                        <label for="y_o_e">Years of Experience (Up to 2 years)<span class="required-field">*</span></label>
-                                        <input type="number" min="0.0" max="2.0" step="any" class="form-control" placeholder="Enter Years of Experience" id="y_o_e" required />
-                                    </div>
-
-                                    <!-- Phone Number -->
-                                    <div class="form-group">
-                                        <label for="phone_number">Phone Number <span class="required-field">*</spa></label>
-                                        <input type="phoneNumber" class="form-control" placeholder="Enter Phone Number" id="phone_number" minlength="10" maxlength="12" pattern="^\+?(\d.*){10,12}$" required />
-                                    </div>
-
-                                    <!-- Email -->
-                                    <div class="form-group">
-                                        <label for="email">Email <span class="required-field">*</span></label>
-                                        <input type="email" class="form-control" placeholder="Enter Email" id="email" required />
-                                    </div>
-
-                                    <!-- Date of Joining -->
-                                    <div class="form-group">
-                                        <label for="d_o_j">Date of Joining (mm/dd/yy) <span class="required-field">*</span></label>
-                                        <input type="text" class="form-control" placeholder="Enter Date of Joining" id="d_o_j" required onkeypress="return false;" autocomplete="off" />
-                                    </div>
-
-                                    <div class="modal-footer-extended">
-                                        <button class="btn btn-primary">Create</button>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    </div>
+                    </div>
+                    <!-- Table -->
+                <c:set var="searchValue" value="${param.Search}"/>
+                <c:if test="${not empty searchValue}">
+                    <c:set var="searchResult" value="${requestScope.LIST_USER}"/>
+                    <c:if test="${not empty searchResult}">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>User ID</th>
+                                    <th>Full name</th>
+                                    <th>Role ID</th>
+                                    <th>Password</th>
+                                    <th>Phone Number</th>
+                                    <th>Email</th>
+                                    <th>Address</th>
+                                    <th>Delete</th>
+                                    <th>Update</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="user" items="${searchResult}" 
+                                           varStatus="counter">
+                                <form action="DispatchServlet">
+                                    <tr>
+                                        <td>
+                                            ${counter.count}
+                                        </td>
+                                        <td>
+                                            ${user.userID}
+                                        </td>
+                                        <td>
+                                            <input type="text" name="fullname" 
+                                                   value="${user.fullname}" autocomplete="off"/>
+                                            <br>
+                                            <c:if test="${(not empty sessionScope.UPDATE_ERROR.fullnameLengthErr) and (user.fullname eq sessionScope.UPDATE_ERROR_FULLNAME)}">
+                                                <font color="red">
+                                                ${sessionScope.UPDATE_ERROR.fullnameLengthErr}
+                                                </font>
+                                            </c:if>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="roleID" 
+                                                   value="${user.roleID}" autocomplete="off"/>
+                                            <br>
+                                            <c:if test="${(not empty sessionScope.UPDATE_ERROR.roleIDLengthErr) and (user.fullname eq sessionScope.UPDATE_ERROR_FULLNAME)}">
+                                                <font color="red">
+                                                ${sessionScope.UPDATE_ERROR.roleIDLengthErr}
+                                                </font>
+                                            </c:if>
+                                            <c:remove var="UPDATE_ERROR"/>
+                                            <c:remove var="UPDATE_ERROR_USERNAME"/>
+                                        </td>
+                                        <td>
+                                            ${user.password}
+                                        </td>
+                                        <td>
+                                            ${user.phone}
+                                        </td>
+                                        <td>
+                                            ${user.email}
+                                        </td>
+                                        <td>
+                                            ${user.address}
+                                        </td>
+                                        <td>
+                                            <c:url var="deleteLink" value="DispatchServlet">
+                                                <c:param name="btAction" 
+                                                         value="Delete"/>
+                                                <c:param name="userID" 
+                                                         value="${user.userID}"/>
+                                                <c:param name="Search" 
+                                                         value="${searchValue}"/>
+                                            </c:url>
+                                            <a class="btn btn-danger" href="${deleteLink}">Delete</a>
+                                            <br>
+                                            <c:if test="${(not empty requestScope.DELETE_USER) and (loginUser eq user.fullname)}">
+                                                <font color="red">
+                                                ${requestScope.DELETE_USER}
+                                                </font>
+                                                <c:remove var="DELETE_USER"/>
+                                            </c:if>
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="userID" 
+                                                   value="${user.userID}" />
+                                            <input type="hidden" name="Search" 
+                                                   value="${searchValue}" />
+                                            <input type="submit" value="Update" 
+                                                   name="btAction"  class="btn btn-warning"/>
+                                        </td>
+                                    </tr>
                                 </form>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </c:if>
+                    <c:if test="${empty searchResult}">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>User ID</th>
+                                    <th>Full name</th>
+                                    <th>Role ID</th>
+                                    <th>Password</th>
+                                    <th>Phone Number</th>
+                                    <th>Email</th>
+                                    <th>Address</th>
+                                    <th>Delete</th>
+                                    <th>Update</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div class="show-table-info">
+                            <div class="alert alert-info center">
+                                <strong>No User Found</strong>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </c:if>
+                </c:if>
             </div>
-
-            <!-- Update -->
-            <div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="editModal">Update Employee Information</h4>
-                        </div>
-                        <div class="modal-body">
-                            <form id="input-form">
-                                <!-- Full name -->
-                                <div class="form-group">
-                                    <label for="edit_full_name">Full Name <span class="required-field">*</span></label>
-                                    <input type="text" class="form-control" id="edit_full_name" value="" required />
-                                </div>
-
-                                <!-- Age -->
-                                <div class="form-group">
-                                    <label for="edit_age">Age <span class="required-field">*</span></label>
-                                    <input type="number" min="18" max="60" class="form-control" id="edit_age" value="" required />
-                                </div>
-                                <!-- Address -->
-                                <div class="form-group">
-                                    <label for="edit_address">Address <span class="required-field">*</span></label>
-                                    <input type="address" class="form-control" id="edit_address" value="" name="address" required>
-                                </div>
-
-
-                                <!-- Year of Experience -->
-                                <div class="form-group">
-                                    <label for="edit_y_o_e">Years of Experience (Up to 2 years)<span class="required-field">*</span></label>
-                                    <input type="number" min="0" max="2" step="any" class="form-control" id="edit_y_o_e" value="" required />
-                                </div>
-
-                                <!-- Phone Number -->
-                                <div class="form-group">
-                                    <label for="edit_phone_number">Phone Number <span class="required-field">*</span></label>
-                                    <input type="PhoneNumber" class="form-control" id="edit_phone_number" value="" required />
-                                </div>
-
-                                <!-- Email -->
-                                <div class="form-group">
-                                    <label for="edit_email">Email <span class="required-field">*</span></label>
-                                    <input type="email" class="form-control" id="edit_email" value="" required />
-                                </div>
-
-                                <!-- Date of Joining -->
-                                <div class="form-group">
-                                    <label for="edit_d_o_j">Date of Joining <span class="required-field" >*</span></label>
-                                    <input type="text" class="form-control" id="edit_d_o_j" value="" required onkeypress="return false;" autocomplete="off" />
-                                </div>
-
-                                <div class="modal-footer-extended">
-                                    <button class="btn btn-success" onclick="editRow();">Update</button>
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Search -->
-            <div class="modal fade" id="search" tabindex="-1" role="dialog" aria-labelledby="searchModalTitle" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="search">Search Employee</h4>
-                        </div>
-                        <div class="modal-body">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- Lower -->
-            <table id="employee_table" class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Full Name</th>
-                        <th>Age</th>
-                        <th>Address</th>
-                        <th>Year of Experience</th>
-                        <th>Phone Number</th>
-                        <th>Email</th>
-                        <th>Date of Joining</th>
-                    </tr>
-                </thead>
-            </table>
-
-            <div class="show-table-info hide">
-                <div class="alert alert-info center">
-                    <strong>No Employee Add Yet</strong>
-                </div>
-            </div>
-        </div>
+        </c:if>
     </body>
 </html>

@@ -9,6 +9,7 @@ import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,11 +18,11 @@ import javax.servlet.http.HttpSession;
 /*
  * @author NDungx
  */
-@WebServlet(name = "DeleteServlet", urlPatterns = {"/DeleteServlet"})
-public class DeleteServlet extends HttpServlet {
+@WebServlet(name = "StartupServlet", urlPatterns = {"/StartupServlet"})
+public class StartupServlet extends HttpServlet {
 
-    private static final String ERROR_PAGE = "error.jsp";
-    private static final String SEARCH_CONTROLLER = "SearchServlet";
+    private final String LOGIN_PAGE = "index.html";
+    private final String SEARCH_PAGE = "search.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,33 +38,36 @@ public class DeleteServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        String url = ERROR_PAGE;
-        String userID = request.getParameter("userID");
-        HttpSession session = request.getSession();
-        UserDTO loginUser = ((UserDTO) session.getAttribute("LOGIN_USER"));
-        String loginUserID = "";
-        if (loginUser != null) {
-            loginUserID = loginUser.getUserID();
-        }
-        UserDAO dao = new UserDAO();
+        String url = LOGIN_PAGE;
 
         try {
-            if (!loginUserID.equals(userID)) {
-                boolean check = dao.deleteAccount(userID);
-                if (check) {
-                    url = SEARCH_CONTROLLER;
-                }
-            } else {
-                request.setAttribute("DELETE_USER", "User is logging in");
-                url = SEARCH_CONTROLLER;
-            }
+            //1. Check cookie existed
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                System.out.println("Cookies found.");
+                //2. Get username and password
+                for (Cookie cookie : cookies) {
+                    String userID = cookie.getName();
+                    String password = cookie.getValue();
+                    //3. Check if username & password is correct
+                    UserDAO dao = new UserDAO();
+                    UserDTO dto = dao.checkLogin(userID, password);
+                    if (dto != null) {
+                        url = SEARCH_PAGE;
+                        HttpSession session = request.getSession(true);
+                        String fullname = dto.getFullname();
+                        session.setAttribute("FULLNAME", fullname);
+                    }//end if user valid
+                }//end for
+            }//end if cookies existed
         } catch (SQLException ex) {
-            String errMsg = ex.getMessage();
-            log("DeleteServlet _ SQL: " + errMsg);
+            log("StartupServlet _ SQL: ", ex.getCause());
         } catch (NamingException ex) {
-            String errMsg = ex.getMessage();
-            log("DeleteServlet _ Naming: " + errMsg);
+            log("StartupServlet _ Naming: ", ex.getCause());
         } finally {
+            //dung rd hay redirect cung dc
+            //gia tri luu tru trong cookie k bi mat khi tra response
+//            response.sendRedirect(url);
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
             out.close();

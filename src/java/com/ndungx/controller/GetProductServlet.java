@@ -1,10 +1,11 @@
 package com.ndungx.controller;
 
-import com.ndungx.user.UserDAO;
-import com.ndungx.user.UserDTO;
+import com.ndungx.product.ProductDAO;
+import com.ndungx.product.ProductDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,16 +13,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /*
  * @author NDungx
  */
-@WebServlet(name = "DeleteServlet", urlPatterns = {"/DeleteServlet"})
-public class DeleteServlet extends HttpServlet {
+@WebServlet(name = "GetProductServlet", urlPatterns = {"/GetProductServlet"})
+public class GetProductServlet extends HttpServlet {
 
-    private static final String ERROR_PAGE = "error.jsp";
-    private static final String SEARCH_CONTROLLER = "SearchServlet";
+    private static final String SHOPPING_PAGE = "shopping.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,34 +34,20 @@ public class DeleteServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
 
-        String url = ERROR_PAGE;
-        String userID = request.getParameter("userID");
-        HttpSession session = request.getSession();
-        UserDTO loginUser = ((UserDTO) session.getAttribute("LOGIN_USER"));
-        String loginUserID = "";
-        if (loginUser != null) {
-            loginUserID = loginUser.getUserID();
-        }
-        UserDAO dao = new UserDAO();
+        String url = SHOPPING_PAGE;
 
         try {
-            if (!loginUserID.equals(userID)) {
-                boolean check = dao.deleteAccount(userID);
-                if (check) {
-                    url = SEARCH_CONTROLLER;
-                }
-            } else {
-                request.setAttribute("DELETE_USER", "User is logging in");
-                url = SEARCH_CONTROLLER;
-            }
-        } catch (SQLException ex) {
-            String errMsg = ex.getMessage();
-            log("DeleteServlet _ SQL: " + errMsg);
-        } catch (NamingException ex) {
-            String errMsg = ex.getMessage();
-            log("DeleteServlet _ Naming: " + errMsg);
+            ProductDAO dao = new ProductDAO();
+            dao.getProduct();
+            List<ProductDTO> list = dao.getProductList();
+            request.setAttribute("PRODUCT_LIST", list);
+        } catch (SQLException e) {
+            log("GetProductServlet _ SQLException: " + e.getMessage());
+        } catch (NamingException e) {
+            log("GetProductServlet _ NamingException: " + e.getMessage());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

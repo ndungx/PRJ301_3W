@@ -7,11 +7,22 @@
             DispatchServlet
         </welcome-file>
     </welcome-file-list>
+    <listener>
+        <description>ServletContextListener</description>
+        <listener-class>com.ndungx.log4j.ContextListener</listener-class>
+    </listener>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
+    <display-name>
+        Log4j
+    </display-name>
+    <context-param>
+        <param-name>log4j-config-location</param-name>
+        <param-value>/WEB-INF/log4j.properties</param-value>
+    </context-param>
     <error-page>
         <error-code>404</error-code>
         <location>/PageNotFound.html</location>

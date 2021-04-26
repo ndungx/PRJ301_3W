@@ -30,7 +30,7 @@
 }
 
 #search {
-    width: 300px;
+    width: 400px;
     height: 39px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -47,6 +47,7 @@
     text-align: center;
     float: right;
     font-size: 18px;
+    margin-top: -48px !important;
 }
 
 .center {
@@ -54,12 +55,11 @@
 }
 
 table tr:not(:first-child) {
-    cursor: pointer;
-    transition: all .25s;
+    transition: all .3s;
 }
 
 table tr:not(:first-child):hover {
-    background-color: #D9EAFF;
+    background-color: #F5F5F5;
 }
 
 .required-field {

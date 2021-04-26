@@ -1,15 +1,19 @@
-package stackjava.com.accessgoogle.servlet;
+package com.ndungx.accessgoogle.servlet;
 
+
+import com.ndungx.accessgoogle.common.GoogleAccountDTO;
+import com.ndungx.accessgoogle.common.GooglePojo;
+import com.ndungx.accessgoogle.common.GoogleUtils;
 import java.io.IOException;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import stackjava.com.accessgoogle.common.GooglePojo;
-import stackjava.com.accessgoogle.common.GoogleUtils;
 //@WebServlet(name = "LoginGoogleServlet", urlPatterns = {"/login-google"})
 
 @WebServlet("/login-google")
@@ -27,15 +31,23 @@ public class LoginGoogleServlet extends HttpServlet {
         String code = request.getParameter("code");
 
         if (code == null || code.isEmpty()) {
-            RequestDispatcher rd = request.getRequestDispatcher("index.html");
-            rd.forward(request, response);
+            RequestDispatcher dis = request.getRequestDispatcher("login.jsp");
+            dis.forward(request, response);
         } else {
             String accessToken = GoogleUtils.getToken(code);
             GooglePojo googlePojo = GoogleUtils.getUserInfo(accessToken);
             request.setAttribute("id", googlePojo.getId());
             request.setAttribute("name", googlePojo.getName());
             request.setAttribute("email", googlePojo.getEmail());
-            RequestDispatcher rd = request.getRequestDispatcher("search.jsp");
+            //--------------------------------------------------//
+            HttpSession session = request.getSession();
+            String userID = googlePojo.getId();
+            String name = googlePojo.getName();
+            String roleID = "G";
+            GoogleAccountDTO dto = new GoogleAccountDTO(userID, name, roleID);
+            session.setAttribute("LOGIN_USER", dto);
+            //-------------------------------------------------//
+            RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
             rd.forward(request, response);
         }
     }
