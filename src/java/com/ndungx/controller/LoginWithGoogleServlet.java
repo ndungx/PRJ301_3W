@@ -1,6 +1,5 @@
 package com.ndungx.controller;
 
-import static com.ndungx.controller.LoginServlet.LOGGER;
 import com.ndungx.user.UserDAO;
 import com.ndungx.user.UserDTO;
 import java.io.IOException;

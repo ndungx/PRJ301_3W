@@ -1,6 +1,5 @@
 package com.ndungx.controller;
 
-import com.ndungx.log4j.TestLog4jServlet;
 import com.ndungx.user.UserDAO;
 import com.ndungx.user.UserDTO;
 import java.io.IOException;

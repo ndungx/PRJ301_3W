@@ -1,6 +1,5 @@
 package com.ndungx.controller;
 
-import com.ndungx.log4j.TestLog4jServlet;
 import com.ndungx.order.OrderDAO;
 import com.ndungx.orderdetail.OrderDetailDAO;
 import com.ndungx.product.ProductDTO;
