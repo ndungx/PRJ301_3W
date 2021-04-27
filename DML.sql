@@ -5,7 +5,7 @@ create table dbo.[Role] (
 	CONSTRAINT PK_Role PRIMARY KEY (roleID));
 
 insert into dbo.[Role](roleID, [name]) values 
-('AD', 'admin'),('G', 'guest'),('M', 'modifier'),('C', 'customer');
+('AD', 'admin'),('G', 'guest'),('M', 'modifier');
 
 create table dbo.[User] (
 	userID varchar(250),
@@ -141,7 +141,7 @@ from dbo.[Order]
 where userID = 'james'
 
 update dbo.Product
-set quantity = 99
+set quantity = 100
 where productID = 1
 
 select quantity
@@ -159,3 +159,8 @@ where orderID = 6
 select [productName] as [productName]
 from dbo.[Product] 
 where productID = 1
+
+select * from dbo.[Product]
+
+delete from dbo.[User]
+where userID like 'dungnse%'
