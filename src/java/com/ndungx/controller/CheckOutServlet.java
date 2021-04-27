@@ -69,7 +69,7 @@ public class CheckOutServlet extends HttpServlet {
                 int quantityDB = orderDetailDAO.getQuantity(productID);
 
                 index++;
-                if (quantityDB - quantity > 0) {
+                if (quantityDB - quantity >= 0) {
                     boolean orderDetailResult = orderDetailDAO.addOrderDetail(orderID, productID, quantity);
                     if (orderResult && orderDetailResult) {
                         orderDetailDAO.updateQuantity(productID, quantityDB - quantity);
