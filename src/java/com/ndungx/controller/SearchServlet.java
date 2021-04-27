@@ -1,5 +1,6 @@
 package com.ndungx.controller;
 
+import com.ndungx.log4j.TestLog4jServlet;
 import com.ndungx.user.UserDAO;
 import com.ndungx.user.UserDTO;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 
 /*
  * @author NDungx
@@ -22,6 +24,7 @@ public class SearchServlet extends HttpServlet {
 
     private static final String ERROR_PAGE = "search.jsp";
     private static final String SEARCH_PAGE = "search.jsp";
+    static final Logger LOGGER = Logger.getLogger(SearchServlet.class);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -50,8 +53,10 @@ public class SearchServlet extends HttpServlet {
                 }
             }
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             log("SearchServlet _ SQL: " + e.getMessage());
         } catch (NamingException e) {
+            LOGGER.error(e.getMessage());
             log("SearchServlet _ Naming: " + e.getMessage());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);

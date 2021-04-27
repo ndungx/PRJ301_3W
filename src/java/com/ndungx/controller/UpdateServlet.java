@@ -1,5 +1,6 @@
 package com.ndungx.controller;
 
+import com.ndungx.log4j.TestLog4jServlet;
 import com.ndungx.user.UserDAO;
 import com.ndungx.user.UserDTO;
 import com.ndungx.user.UserUpdateErrorsDTO;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /*
  * @author NDungx
@@ -23,6 +25,7 @@ public class UpdateServlet extends HttpServlet {
 
     private static final String ERROR_PAGE = "error.jsp";
     private static final String SEARCH_CONTROLLER = "SearchServlet";
+    static final Logger LOGGER = Logger.getLogger(UpdateServlet.class);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -83,8 +86,10 @@ public class UpdateServlet extends HttpServlet {
                 }
             }
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             log("UpdateServlet _ SQL: " + e.getMessage());
         } catch (NamingException e) {
+            LOGGER.error(e.getMessage());
             log("UpdateServlet _ Naming: " + e.getMessage());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);

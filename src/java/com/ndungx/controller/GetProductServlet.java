@@ -1,5 +1,6 @@
 package com.ndungx.controller;
 
+import com.ndungx.log4j.TestLog4jServlet;
 import com.ndungx.product.ProductDAO;
 import com.ndungx.product.ProductDTO;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 
 /*
  * @author NDungx
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 public class GetProductServlet extends HttpServlet {
 
     private static final String SHOPPING_PAGE = "shopping.jsp";
+    static final Logger LOGGER = Logger.getLogger(GetProductServlet.class);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,8 +48,10 @@ public class GetProductServlet extends HttpServlet {
             List<ProductDTO> list = dao.getProductList();
             request.setAttribute("PRODUCT_LIST", list);
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             log("GetProductServlet _ SQLException: " + e.getMessage());
         } catch (NamingException e) {
+            LOGGER.error(e.getMessage());
             log("GetProductServlet _ NamingException: " + e.getMessage());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);

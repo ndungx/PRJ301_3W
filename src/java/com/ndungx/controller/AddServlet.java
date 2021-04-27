@@ -1,5 +1,6 @@
 package com.ndungx.controller;
 
+import com.ndungx.log4j.TestLog4jServlet;
 import com.ndungx.product.ProductDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /*
  * @author NDungx
@@ -19,6 +21,7 @@ public class AddServlet extends HttpServlet {
 
     private static final String ERROR_PAGE = "error.jsp";
     private static final String SHOPPING_PAGE = "GetProductServlet";
+    static final Logger LOGGER = Logger.getLogger(AddServlet.class);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -61,6 +64,7 @@ public class AddServlet extends HttpServlet {
             request.setAttribute("MESSAGE", "You bought " + productName + " Successfully");
             url = SHOPPING_PAGE;
         } catch (Exception e) {
+            LOGGER.error(e.getMessage());
             log("CreateServlet: " + e.getMessage());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);

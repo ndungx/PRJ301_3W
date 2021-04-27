@@ -1,7 +1,5 @@
 package com.ndungx.accessgoogle.servlet;
 
-
-import com.ndungx.accessgoogle.common.GoogleAccountDTO;
 import com.ndungx.accessgoogle.common.GooglePojo;
 import com.ndungx.accessgoogle.common.GoogleUtils;
 import java.io.IOException;
@@ -15,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 //@WebServlet(name = "LoginGoogleServlet", urlPatterns = {"/login-google"})
-
 @WebServlet("/login-google")
 public class LoginGoogleServlet extends HttpServlet {
 
@@ -40,12 +37,16 @@ public class LoginGoogleServlet extends HttpServlet {
             request.setAttribute("name", googlePojo.getName());
             request.setAttribute("email", googlePojo.getEmail());
             //--------------------------------------------------//
-            HttpSession session = request.getSession();
-            String userID = googlePojo.getId();
-            String name = googlePojo.getName();
+            String userID = googlePojo.getEmail();
+            String fullname = googlePojo.getName();
             String roleID = "G";
-            GoogleAccountDTO dto = new GoogleAccountDTO(userID, name, roleID);
-            session.setAttribute("LOGIN_USER", dto);
+            String password = googlePojo.getId();
+            
+            request.setAttribute("USER_ID", userID);
+            request.setAttribute("FULLNAME", fullname);
+            request.setAttribute("ROLE_ID", roleID);
+            request.setAttribute("PASSWORD", password);
+            request.setAttribute("IS_LOGIN_GOOGLE", true);
             //-------------------------------------------------//
             RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
             rd.forward(request, response);

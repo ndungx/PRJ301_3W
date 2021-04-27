@@ -1,5 +1,6 @@
 package com.ndungx.controller;
 
+import com.ndungx.log4j.TestLog4jServlet;
 import com.ndungx.user.UserDAO;
 import com.ndungx.user.UserDTO;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /*
  * @author NDungx
@@ -24,6 +26,7 @@ public class LoginServlet extends HttpServlet {
     private static final String ERROR_PAGE = "loginfail.html";
     private static final String SEARCH_PAGE = "search.jsp";
     private static final String SHOPPING_PAGE = "GetProductServlet";
+    static final Logger LOGGER = Logger.getLogger(LoginServlet.class);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,11 +51,11 @@ public class LoginServlet extends HttpServlet {
         try {
             UserDTO dto = dao.checkLogin(userID, password);
             HttpSession session = request.getSession();
-            
+
             Cookie cookie = new Cookie(userID, password);
             cookie.setMaxAge(60 * 3);
             response.addCookie(cookie);
-            
+
             if (dto != null) {
                 session.setAttribute("LOGIN_USER", dto);
                 url = SEARCH_PAGE;
@@ -64,8 +67,10 @@ public class LoginServlet extends HttpServlet {
                 }
             }
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             log("LoginServlet _ SQL: " + e.getMessage());
         } catch (NamingException e) {
+            LOGGER.error(e.getMessage());
             log("LoginServlet _ Naming: " + e.getMessage());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);

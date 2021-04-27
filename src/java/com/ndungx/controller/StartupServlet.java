@@ -1,5 +1,6 @@
 package com.ndungx.controller;
 
+import com.ndungx.log4j.TestLog4jServlet;
 import com.ndungx.user.UserDAO;
 import com.ndungx.user.UserDTO;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /*
  * @author NDungx
@@ -23,6 +25,7 @@ public class StartupServlet extends HttpServlet {
 
     private final String LOGIN_PAGE = "index.html";
     private final String SEARCH_PAGE = "search.jsp";
+    static final Logger LOGGER = Logger.getLogger(StartupServlet.class);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -61,8 +64,10 @@ public class StartupServlet extends HttpServlet {
                 }//end for
             }//end if cookies existed
         } catch (SQLException ex) {
+            LOGGER.error(ex.getMessage());
             log("StartupServlet _ SQL: ", ex.getCause());
         } catch (NamingException ex) {
+            LOGGER.error(ex.getMessage());
             log("StartupServlet _ Naming: ", ex.getCause());
         } finally {
             //dung rd hay redirect cung dc

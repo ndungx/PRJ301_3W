@@ -1,5 +1,6 @@
 package com.ndungx.controller;
 
+import com.ndungx.log4j.TestLog4jServlet;
 import com.ndungx.user.UserDAO;
 import com.ndungx.user.UserDTO;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /*
  * @author NDungx
@@ -22,6 +24,7 @@ public class DeleteServlet extends HttpServlet {
 
     private static final String ERROR_PAGE = "error.jsp";
     private static final String SEARCH_CONTROLLER = "SearchServlet";
+    static final Logger LOGGER = Logger.getLogger(DeleteServlet.class);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -58,11 +61,11 @@ public class DeleteServlet extends HttpServlet {
                 url = SEARCH_CONTROLLER;
             }
         } catch (SQLException ex) {
-            String errMsg = ex.getMessage();
-            log("DeleteServlet _ SQL: " + errMsg);
+            LOGGER.error(ex.getMessage());
+            log("DeleteServlet _ SQL: " + ex.getMessage());
         } catch (NamingException ex) {
-            String errMsg = ex.getMessage();
-            log("DeleteServlet _ Naming: " + errMsg);
+            LOGGER.error(ex.getMessage());
+            log("DeleteServlet _ Naming: " + ex.getMessage());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

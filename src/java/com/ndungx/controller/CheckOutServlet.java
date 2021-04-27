@@ -1,5 +1,6 @@
 package com.ndungx.controller;
 
+import com.ndungx.log4j.TestLog4jServlet;
 import com.ndungx.order.OrderDAO;
 import com.ndungx.orderdetail.OrderDetailDAO;
 import com.ndungx.product.ProductDTO;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /*
  * @author NDungx
@@ -26,6 +28,7 @@ public class CheckOutServlet extends HttpServlet {
     private final String ERROR_PAGE = "error.jsp";
     private static final String OUT_OF_STOCK_PAGE = "viewCart.jsp";
     private final String CHECKOUT_SUCCESS = "checkout.jsp";
+    static final Logger LOGGER = Logger.getLogger(CheckOutServlet.class);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -66,8 +69,8 @@ public class CheckOutServlet extends HttpServlet {
                 int quantity = product.getValue().getQuantity();
                 int quantityDB = orderDetailDAO.getQuantity(productID);
 
-                index++; 
-               if (quantityDB - quantity > 0) {
+                index++;
+                if (quantityDB - quantity > 0) {
                     boolean orderDetailResult = orderDetailDAO.addOrderDetail(orderID, productID, quantity);
                     if (orderResult && orderDetailResult) {
                         orderDetailDAO.updateQuantity(productID, quantityDB - quantity);
@@ -108,22 +111,28 @@ public class CheckOutServlet extends HttpServlet {
                 }
             }
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             log("CheckOutServlet _ SQL: " + e.getMessage());
             try {
                 orderDetailDAO.rollBackOrderDetail(orderDAO.getLastOrderID(userID));
             } catch (NamingException ex) {
+                LOGGER.error(ex.getMessage());
                 log("CheckOutServlet _ Rollback _ Naming: " + ex.getMessage());
             } catch (SQLException ex) {
+                LOGGER.error(ex.getMessage());
                 log("CheckOutServlet _ Rollback _ SQL: " + ex.getMessage());
             }
             try {
                 orderDAO.rollBackOrder(orderDAO.getLastOrderID(userID));
             } catch (NamingException ex) {
+                LOGGER.error(ex.getMessage());
                 log("CheckOutServlet _ Rollback _ Naming: " + ex.getMessage());
             } catch (SQLException ex) {
+                LOGGER.error(ex.getMessage());
                 log("CheckOutServlet _ Rollback _ SQL: " + ex.getMessage());
             }
         } catch (NamingException e) {
+            LOGGER.error(e.getMessage());
             log("CheckOutServlet _ Naming: " + e.getMessage());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);

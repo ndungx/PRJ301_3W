@@ -1,5 +1,6 @@
 package com.ndungx.controller;
 
+import com.ndungx.log4j.TestLog4jServlet;
 import com.ndungx.user.UserDAO;
 import com.ndungx.user.UserCreateErrorDTO;
 import com.ndungx.user.UserDTO;
@@ -14,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 
 /*
  * @author NDungx
@@ -23,6 +25,7 @@ public class CreateServlet extends HttpServlet {
 
     private static final String LOGIN_PAGE = "index.html";
     private static final String CREATE_PAGE = "createAccount.jsp";
+    static final Logger LOGGER = Logger.getLogger(CreateServlet.class);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -102,12 +105,14 @@ public class CreateServlet extends HttpServlet {
             }
         } catch (SQLException e) {
             String errMsg = e.getMessage();
+            LOGGER.error(e.getMessage());
             log("CreateServlet _ SQL: " + errMsg);
             if (errMsg.contains("duplicate")) {
                 error.setUserIDDuplicateError(userID + " is existed");
                 request.setAttribute("CREATE_ERROR", error);
             }
         } catch (NamingException e) {
+            LOGGER.error(e.getMessage());
             log("CreateServlet _ Naming: " + e.getMessage());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
