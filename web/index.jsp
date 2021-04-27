@@ -3,9 +3,9 @@
          pageEncoding="UTF-8"%>
 <html>
     <head>
-        <title>Login Successful</title>
+        <title>Login Google Success</title>
     </head>
     <body>
-        <c:redirect url="GetProductServlet"></c:redirect>
+        <c:redirect url="createAccount.jsp"></c:redirect>
     </body>
 </html>

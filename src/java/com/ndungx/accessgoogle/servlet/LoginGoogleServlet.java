@@ -2,7 +2,11 @@ package com.ndungx.accessgoogle.servlet;
 
 import com.ndungx.accessgoogle.common.GooglePojo;
 import com.ndungx.accessgoogle.common.GoogleUtils;
+import com.ndungx.controller.LoginServlet;
+import com.ndungx.user.UserDAO;
 import java.io.IOException;
+import java.sql.SQLException;
+import javax.naming.NamingException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,12 +15,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 //@WebServlet(name = "LoginGoogleServlet", urlPatterns = {"/login-google"})
 @WebServlet("/login-google")
 public class LoginGoogleServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    private static final String ERROR_PAGE = "error.jsp";
+    private static final String LOGIN_FAIL_PAGE = "loginfail.html";
+    private static final String CREATE_ACCOUNT_GOOGLE_PAGE = "index.jsp";
+    private static final String LOGIN_GOOGLE_CONTROLLER = "LoginWithGoogleServlet";
+    static final Logger LOGGER = Logger.getLogger(LoginServlet.class);
 
     public LoginGoogleServlet() {
         super();
@@ -25,31 +35,45 @@ public class LoginGoogleServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String url = ERROR_PAGE;
+
         String code = request.getParameter("code");
 
+        UserDAO dao = new UserDAO();
+
         if (code == null || code.isEmpty()) {
-            RequestDispatcher dis = request.getRequestDispatcher("login.jsp");
-            dis.forward(request, response);
+            RequestDispatcher rd = request.getRequestDispatcher(LOGIN_FAIL_PAGE);
+            rd.forward(request, response);
         } else {
             String accessToken = GoogleUtils.getToken(code);
             GooglePojo googlePojo = GoogleUtils.getUserInfo(accessToken);
-            request.setAttribute("id", googlePojo.getId());
-            request.setAttribute("name", googlePojo.getName());
-            request.setAttribute("email", googlePojo.getEmail());
-            //--------------------------------------------------//
-            String userID = googlePojo.getEmail();
+
+            String email = googlePojo.getEmail();
             String fullname = googlePojo.getName();
-            String roleID = "G";
             String password = googlePojo.getId();
-            
-            request.setAttribute("USER_ID", userID);
-            request.setAttribute("FULLNAME", fullname);
-            request.setAttribute("ROLE_ID", roleID);
-            request.setAttribute("PASSWORD", password);
-            request.setAttribute("IS_LOGIN_GOOGLE", true);
-            //-------------------------------------------------//
-            RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
-            rd.forward(request, response);
+
+            try {
+                HttpSession sesion = request.getSession();
+                sesion.setAttribute("USER_ID", email);
+                sesion.setAttribute("FULLNAME", fullname);
+                sesion.setAttribute("PASSWORD", password);
+                sesion.setAttribute("IS_LOGIN_GOOGLE", true);
+
+                if (dao.checkDuplicate(email)) {
+                    url = LOGIN_GOOGLE_CONTROLLER;
+                } else {
+                    url = CREATE_ACCOUNT_GOOGLE_PAGE;
+                }
+            } catch (SQLException e) {
+                LOGGER.error(e.getMessage());
+                log("LoginGoogleServlet _ SQL: " + e.getMessage());
+            } catch (NamingException e) {
+                LOGGER.error(e.getMessage());
+                log("LoginGoogleServlet _ Naming: " + e.getMessage());
+            } finally {
+                RequestDispatcher rd = request.getRequestDispatcher(url);
+                rd.forward(request, response);
+            }
         }
     }
 
@@ -58,5 +82,4 @@ public class LoginGoogleServlet extends HttpServlet {
             throws ServletException, IOException {
         doGet(request, response);
     }
-
 }

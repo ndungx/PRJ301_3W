@@ -67,6 +67,7 @@ public class UserDAO implements Serializable {
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
+
         try {
             con = DBUtils.makeConnection();
             if (con != null) {
@@ -199,22 +200,51 @@ public class UserDAO implements Serializable {
         boolean check = false;
         Connection con = null;
         PreparedStatement stm = null;
-        ResultSet rs = null;
 
         try {
             con = DBUtils.makeConnection();
             if (con != null) {
-                String sql = "insert into dbo.[User](userID, fullname, roleID, [password], phone, email, [address]) "
-                        + "values(?, ?, ?, ?, ?, ?, ?)";
+                String sql = "insert into dbo.[User] (userID, [password], fullname, roleID, phone, email, [address]) "
+                        + "values (?, ?, ?, ?, ?, ?, ?)";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, dto.getUserID());
-                stm.setString(2, dto.getFullname());
-                stm.setString(3, dto.getRoleID());
-                stm.setString(4, dto.getPassword());
+                stm.setString(2, dto.getPassword());
+                stm.setString(3, dto.getFullname());
+                stm.setString(4, dto.getRoleID());
                 stm.setString(5, dto.getPhone());
                 stm.setString(6, dto.getEmail());
                 stm.setString(7, dto.getAddress());
-                check = stm.executeUpdate() == 0 ? false : true;
+                int row = stm.executeUpdate();
+                if (row > 0) {
+                    return true;
+                }
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean isGoogleAccountCreated(String userID)
+            throws SQLException, NamingException {
+        boolean check = false;
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            con = DBUtils.makeConnection();
+            if (con != null) {
+                String sql = "select userID "
+                        + "from dbo.[User] "
+                        + "where userID = ?";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, userID);
+                rs = stm.executeQuery();
                 if (rs.next()) {
                     check = true;
                 }

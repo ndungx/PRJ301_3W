@@ -28,6 +28,7 @@ public class DispatchServlet extends HttpServlet {
     private static final String EDIT_CART_CONTROLLER = "EditServlet";
     private static final String STARTUP_CONTROLLER = "StartupServlet";
     private static final String CHECKOUT_CONTROLLER = "CheckOutServlet";
+    private static final String CREATE_GOOGLE_ACCOUNT_CONTROLLER = "CreateGoogleAccountServlet";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -71,6 +72,8 @@ public class DispatchServlet extends HttpServlet {
                 url = EDIT_CART_CONTROLLER;
             } else if (button.equals("Checkout")){
                 url = CHECKOUT_CONTROLLER;
+            } else if (button.equals("Create Google Account")){
+                url = CREATE_GOOGLE_ACCOUNT_CONTROLLER;
             }
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);

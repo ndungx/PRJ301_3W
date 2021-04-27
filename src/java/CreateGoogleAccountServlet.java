@@ -1,7 +1,7 @@
-package com.ndungx.controller;
 
-import com.ndungx.user.UserDAO;
+import com.ndungx.controller.CreateServlet;
 import com.ndungx.user.UserCreateErrorDTO;
+import com.ndungx.user.UserDAO;
 import com.ndungx.user.UserDTO;
 import com.ndungx.valivation.Validation;
 import java.io.IOException;
@@ -14,15 +14,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 /*
  * @author NDungx
  */
-@WebServlet(name = "CreateServlet", urlPatterns = {"/CreateServlet"})
-public class CreateServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/CreateGoogleAccountServlet"})
+public class CreateGoogleAccountServlet extends HttpServlet {
 
-    private static final String LOGIN_PAGE = "index.html";
+    private static final String LOGIN_WITH_GOOGLE_CONTROLLER = "LoginWithGoogleServlet";
     private static final String CREATE_PAGE = "createAccount.jsp";
     static final Logger LOGGER = Logger.getLogger(CreateServlet.class);
 
@@ -38,82 +39,55 @@ public class CreateServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
 
-        String userID = request.getParameter("userID");
-        String fullname = request.getParameter("fullname");
-        String roleID = "G";
-        String phone = request.getParameter("phone");
-        String email = request.getParameter("email");
-        String address = request.getParameter("address");
-        String password = request.getParameter("password");
-        String confirm = request.getParameter("confirm");
         String url = CREATE_PAGE;
-        UserDAO dao = new UserDAO();
-        UserCreateErrorDTO error = new UserCreateErrorDTO("", "", "", "", "", "", "", "", "");
-        boolean check = false;
 
         try {
-            if (userID.length() < 3 || userID.length() > 10) {
-                check = true;
-                error.setUserIDError("userID must be > 3 and < 10");
-            }
-            if (fullname.length() < 5 || fullname.length() > 50) {
-                check = true;
-                error.setFullnameError("full name must be > 5 and < 50");
-            }
+            HttpSession session = request.getSession();
+
+            String userID = (String) session.getAttribute("USER_ID");
+            String fullname = (String) session.getAttribute("FULLNAME");
+            String roleID = "G";
+            String password = (String) session.getAttribute("PASSWORD");
+            String phone = request.getParameter("phone");
+            String email = (String) session.getAttribute("USER_ID");
+            String address = request.getParameter("address");
+
+            UserDAO dao = new UserDAO();
+            UserCreateErrorDTO error = new UserCreateErrorDTO("", "", "", "", "", "", "", "", "");
+            boolean foundErr = false;
+
             if (!Validation.isValidPhoneNumber(phone)) {
-                check = true;
+                foundErr = true;
                 error.setPhoneError("phone number invalid");
             }
             if (phone.length() < 10 || phone.length() > 12) {
-                check = true;
+                foundErr = true;
                 error.setPhoneError("phone must be > 10 and < 12");
             }
-            if (!Validation.isValidEmail(email)) {
-                check = true;
-                error.setEmailError("email invalid");
-            }
-            if (email.length() < 2 || email.length() > 50) {
-                check = true;
-                error.setEmailError("email must be > 2 and < 50");
-            }
             if (address.length() < 4 || address.length() > 100) {
-                check = true;
+                foundErr = true;
                 error.setAddressError("address must be > 4 and < 100");
             }
-            if (password.length() < 4 || password.length() > 20) {
-                check = true;
-                error.setPasswordError("password must be > 4 and < 20");
-            } else if (!confirm.equals(password)) {
-                check = true;
-                error.setConfirmError("confirm does not match password");
-            }
-            if (check) {
+            if (foundErr) {
                 request.setAttribute("ERROR", error);
             } else {
-                boolean checkDuplicate = dao.checkDuplicate(userID);
-                if (checkDuplicate) {
-                    error.setUserIDError("user ID is duplicate");
-                    request.setAttribute("ERROR", error);
-                } else {
-                    UserDTO dto = new UserDTO(userID, fullname, roleID, password, phone, email, address);
-                    dao.createAccount(dto);
-                    url = LOGIN_PAGE;
-                }
+                UserDTO dto = new UserDTO(userID, fullname, roleID, password, phone, email, address);
+                dao.createAccount(dto);
+                url = LOGIN_WITH_GOOGLE_CONTROLLER;
             }
         } catch (SQLException e) {
-            String errMsg = e.getMessage();
             LOGGER.error(e.getMessage());
-            log("CreateServlet _ SQL: " + errMsg);
-            if (errMsg.contains("duplicate")) {
-                error.setUserIDDuplicateError(userID + " is existed");
-                request.setAttribute("CREATE_ERROR", error);
-            }
+            log("CreateGoogleAccountServlet _ SQL: " + e.getMessage());
         } catch (NamingException e) {
             LOGGER.error(e.getMessage());
-            log("CreateServlet _ Naming: " + e.getMessage());
-        } finally {
+            log("CreateGoogleAccountServlet _ Naming: " + e.getMessage());
+        } catch(Exception e){
+            LOGGER.error(e.getMessage());
+            log("CreateGoogleAccountServlet _ Exception: " + e.getMessage());
+        }finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
             out.close();
