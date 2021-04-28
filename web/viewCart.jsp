@@ -85,22 +85,22 @@
                                                     <td>
                                                         <div class="price" style="width: 84px;">
                                                             <fmt:formatNumber maxFractionDigits="3">${dto.value.price}</fmt:formatNumber>&nbsp;₫ 
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-primary" type="submit" value="Edit" name="btAction">
-                                                            <span style="color: white;"><i class="fas fa-edit" style="font-size: 15px"></i></span>
-                                                        </button>
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-danger" type="submit" value="Remove" name="btAction">
-                                                            <span style="color: white;"><i class="fas fa-trash" style="font-size: 15px"></i></span>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div style="margin-left: 4%; margin-top: 2%; color: red">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-primary" type="submit" value="Edit" name="btAction">
+                                                                <span style="color: white;"><i class="fas fa-edit" style="font-size: 15px"></i></span>
+                                                            </button>
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-danger" type="submit" value="Remove" name="btAction">
+                                                                <span style="color: white;"><i class="fas fa-trash" style="font-size: 15px"></i></span>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div style="margin-left: 4%; margin-top: 2%; color: red">
                                             <c:if test="${not empty requestScope.OUT_OF_STOCK and dto.value.productID eq requestScope.PRODUCT_ID}">
                                                 ${OUT_OF_STOCK}
                                             </c:if>
@@ -120,13 +120,11 @@
                             </div>
                             <hr>
                             <div class="row">
-                                <div class="col">ITEMS <c:out value="${fn:length(map)}" /></div>
+                                <div class="col">ITEMS: <c:out value="${fn:length(map)}" /></div>
                                 <div class="col text-right"><fmt:formatNumber maxFractionDigits="3">${total}</fmt:formatNumber> ₫</div>
                                 </div>
 
-
                                 <p style="margin-bottom: 2%; margin-top: 1.2rem">SHIPPING METHOD</p> 
-
                                 <form action="ShippingMethodServlet" style="padding: 0px;">
                                     <select name="cmbShippingMethod" onchange='if (this.value != 0) {
                                                 this.form.submit();
@@ -161,7 +159,8 @@
                                                                                     value="Discount" style="width: 4rem; margin-left: 0.5rem"
                                                                                     class="btn btn-primary">Apply
                                                                             </button>
-                                                                        </div>-->
+                                                                        </div>
+                                    -->
                                 </div>
                                 <c:if test="${not empty loginUser}">
                                     <p style="margin-top: 1.2rem; margin-bottom: 2%">SHIPPING ADDRESS</p> 
@@ -175,7 +174,7 @@
                                     <div class="col text-right"><fmt:formatNumber maxFractionDigits="3">${total + SHIPPING_FEE}</fmt:formatNumber> ₫</div>
                                     </div> 
                                 <c:if test="${not empty loginUser}">
-                                    <button class="btn btn-dark btn-block" style="cursor: pointer" 
+                                    <button class="btn btn-dark btn-block" style="cursor: pointer; margin-top: 2rem;" 
                                             type="submit" name="btAction" 
                                             value="Checkout">CHECKOUT</button>
                                 </c:if>
