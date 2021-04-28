@@ -145,7 +145,7 @@ public class UserDAO implements Serializable {
                         + "set fullname = ?, roleID = ? "
                         + "where userID = ?";
                 stm = con.prepareStatement(sql);
-                stm.setString(1, user.getFullname());
+                stm.setNString(1, user.getFullname());
                 stm.setString(2, user.getRoleID());
                 stm.setString(3, user.getUserID());
                 check = stm.executeUpdate() == 0 ? false : true;
@@ -209,50 +209,17 @@ public class UserDAO implements Serializable {
                 stm = con.prepareStatement(sql);
                 stm.setString(1, dto.getUserID());
                 stm.setString(2, dto.getPassword());
-                stm.setString(3, dto.getFullname());
+                stm.setNString(3, dto.getFullname());
                 stm.setString(4, dto.getRoleID());
                 stm.setString(5, dto.getPhone());
                 stm.setString(6, dto.getEmail());
-                stm.setString(7, dto.getAddress());
+                stm.setNString(7, dto.getAddress());
                 int row = stm.executeUpdate();
                 if (row > 0) {
                     return true;
                 }
             }
         } finally {
-            if (stm != null) {
-                stm.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
-        return check;
-    }
-
-    public boolean isGoogleAccountCreated(String userID)
-            throws SQLException, NamingException {
-        boolean check = false;
-        Connection con = null;
-        PreparedStatement stm = null;
-        ResultSet rs = null;
-        try {
-            con = DBUtils.makeConnection();
-            if (con != null) {
-                String sql = "select userID "
-                        + "from dbo.[User] "
-                        + "where userID = ?";
-                stm = con.prepareStatement(sql);
-                stm.setString(1, userID);
-                rs = stm.executeQuery();
-                if (rs.next()) {
-                    check = true;
-                }
-            }
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
             if (stm != null) {
                 stm.close();
             }
