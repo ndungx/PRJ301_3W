@@ -75,7 +75,6 @@
                             </div>
                         </div>
                         <h6 class="text-uppercase" style="color: #B2B2B2; margin-top: 15px;"><b>HERE'S WHAT YOU ORDERED:</b></h6>
-                        <!--<hr style="color: #B2B2B2">-->
 
                         <div class="row border-top border-bottom" style="padding-bottom: 2rem; margin-top: 15px;">
                             <table style="width: 100%;">

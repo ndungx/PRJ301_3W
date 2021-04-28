@@ -62,37 +62,48 @@
                                                                     = total 
                                                                     + dto.value.price 
                                                                     * dto.value.quantity}"/>
-                                        <div class="row main align-items-center">
-                                            <div class="col-2"><img class="img-fluid" src="${dto.value.image}"></div>
-                                            <div class="col">
-                                                <div class="row text-muted">${dto.value.categoryID}</div>
-                                                <div class="row">${dto.value.productName}</div>
-                                            </div>
-                                            <div class="col" style="display: flex"> 
-                                                <input type="number" name="quantity" value="${dto.value.quantity}" min="1" placeholder="Quantity" style="width: 100%">
-                                            </div>
-                                            <div class="col"style="display: flex; flex-direction: row; justify-content: space-between;">
-                                                <div class="price">
-                                                    <fmt:formatNumber maxFractionDigits="3">${dto.value.price}</fmt:formatNumber>&nbsp;₫ 
-                                                    </div>
-
-                                                    <input type="hidden" name="productID" value="${dto.value.productID}" />
-                                                <div class="deleteProductButton" style="margin-right: 5%; margin-left: 2%" >
-                                                    <button class="btn btn-primary" type="submit" value="Edit" name="btAction">
-                                                        <span style="color: white;"><i class="fas fa-edit" style="font-size: 15px"></i></span>
-                                                    </button>
-                                                </div>
-                                                <div class="deleteProductButton">
-                                                    <button class="btn btn-danger" type="submit" value="Remove" name="btAction">
-                                                        <span style="color: white;"><i class="fas fa-trash" style="font-size: 15px"></i></span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div style="margin-left: 4%; margin-top: 2%; color: red">
-                                                <c:if test="${not empty requestScope.OUT_OF_STOCK and dto.value.productID eq requestScope.PRODUCT_ID}">
-                                                    ${OUT_OF_STOCK}
-                                                </c:if>
-                                            </div>
+                                        <input type="hidden" name="productID" value="${dto.value.productID}" />
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <div class="col-2">
+                                                            <img src="${dto.value.image}">
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="col" style="width: 127px;">
+                                                            <div class="row text-muted">${dto.value.categoryID}</div>
+                                                            <div class="row">${dto.value.productName}</div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="col" style="display: flex"> 
+                                                            <input type="number" name="quantity" value="${dto.value.quantity}" min="1" placeholder="Quantity" style="width: 100%">
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="price" style="width: 84px;">
+                                                            <fmt:formatNumber maxFractionDigits="3">${dto.value.price}</fmt:formatNumber>&nbsp;₫ 
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-primary" type="submit" value="Edit" name="btAction">
+                                                            <span style="color: white;"><i class="fas fa-edit" style="font-size: 15px"></i></span>
+                                                        </button>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-danger" type="submit" value="Remove" name="btAction">
+                                                            <span style="color: white;"><i class="fas fa-trash" style="font-size: 15px"></i></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div style="margin-left: 4%; margin-top: 2%; color: red">
+                                            <c:if test="${not empty requestScope.OUT_OF_STOCK and dto.value.productID eq requestScope.PRODUCT_ID}">
+                                                ${OUT_OF_STOCK}
+                                            </c:if>
                                         </div>
                                     </form>
                                 </c:forEach>
@@ -152,10 +163,12 @@
                                                                             </button>
                                                                         </div>-->
                                 </div>
-                                <p style="margin-top: 1.2rem; margin-bottom: 2%">SHIPPING ADDRESS</p> 
-                                <b>${address}</b>
-                                <br>
-                                <br>
+                                <c:if test="${not empty loginUser}">
+                                    <p style="margin-top: 1.2rem; margin-bottom: 2%">SHIPPING ADDRESS</p> 
+                                    <b>${address}</b>
+                                    <br>
+                                    <br>
+                                </c:if>
                                 <c:set var="SHIPPING_FEE" value="${requestScope.SHIPPING_FEE}"/>
                                 <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
                                     <div class="col">TOTAL PRICE</div>
@@ -167,8 +180,11 @@
                                             value="Checkout">CHECKOUT</button>
                                 </c:if>
                                 <c:if test="${empty loginUser}">
-                                    <div style="display: flex; justify-content: center">
-                                        <a href="index.html" style="text-decoration: none;">Please log in to check out</a>
+                                    <div style="display: flex; align-items: center; flex-direction: column">
+                                        <a href="index.html" style="text-decoration: none;">Please log in to check out!</a>
+                                        <br>
+                                        <p style="margin: 0px"><b>Don't have account yet?</b></p>
+                                        <a href="createAccount.jsp">Click here to create!</a>
                                     </div>
                                 </c:if>
                             </form>

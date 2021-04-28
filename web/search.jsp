@@ -45,11 +45,11 @@
         <c:set var="loginUser" value="${sessionScope.LOGIN_USER.fullname}"/>
         <c:set var="roleID" value="${sessionScope.LOGIN_USER.roleID}"/>
 
-        <c:if test="${roleID ne 'AD'}">
-            <a href="index.html">Permission Denied</a>
-        </c:if>
-        <c:if test="${empty loginUser}">
-            <a href="index.html">Please Login First</a>
+        <c:if test="${roleID ne 'AD' and empty loginUser}">
+            <div style="display: flex; flex-direction: column; align-items: center">
+                <h1>Permission Denied</h1>
+                <a href="GetProductServlet" style="text-decoration: none;">Click Here to get back to Shopping</a>
+            </div>
         </c:if>
 
         <c:if test="${not empty loginUser and roleID eq 'AD'}">
