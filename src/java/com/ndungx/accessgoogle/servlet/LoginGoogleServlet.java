@@ -24,7 +24,7 @@ public class LoginGoogleServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final String ERROR_PAGE = "error.jsp";
     private static final String LOGIN_FAIL_PAGE = "loginfail.html";
-    private static final String CREATE_ACCOUNT_GOOGLE_PAGE = "index.jsp";
+    private static final String CREATE_ACCOUNT_GOOGLE_PAGE = "createAccount.jsp";
     private static final String LOGIN_GOOGLE_CONTROLLER = "LoginWithGoogleServlet";
     static final Logger LOGGER = Logger.getLogger(LoginServlet.class);
 
