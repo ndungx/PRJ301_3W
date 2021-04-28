@@ -18,7 +18,7 @@ body {
 }
 
 .card {
-    margin-bottom: 30px;
+    margin-bottom: 3rem !important;
     border: 0;
     -webkit-transition: all .3s ease;
     transition: all .3s ease;
@@ -187,31 +187,6 @@ input {
 
 input:focus::-webkit-input-placeholder {
     color: transparent
-}
-
-.checkoutButton {
-    background-color: #000;
-    border-color: #000;
-    color: white;
-    width: 100%;
-    font-size: 0.7rem;
-    margin-top: 4vh;
-    padding: 1vh;
-    border-radius: 0
-}
-
-.checkoutButton:focus {
-    box-shadow: none;
-    outline: none;
-    box-shadow: none;
-    color: white;
-    -webkit-box-shadow: none;
-    -webkit-user-select: none;
-    transition: none
-}
-
-.checkoutButton:hover {
-    color: white
 }
 
 a {
