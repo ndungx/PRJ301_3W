@@ -130,10 +130,10 @@ delete from [Order] where orderID = 60;
 insert into dbo.[Order]([userID], [date], total, [address])
 values('james',CURRENT_TIMESTAMP,1000000,N'123/5 đường kha vạn cân');
 
-delete from [Order] where userID like 'dungnse%'
+delete from [Order] where userID like 'dungn%'
 DBCC CHECKIDENT ('[Order]', RESEED, 0);
 
-delete from [OrderDetail] where productID = 30;
+delete from [OrderDetail] where productID = 1;
 
 delete from [OrderDetail] where orderID = 8;
 
