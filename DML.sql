@@ -21,6 +21,7 @@ create table dbo.[User] (
 
 insert into dbo.[User] (userID, [password], fullname, roleID, phone, email, [address])
 values 
+('hello', 1234, N'Dũng', 'G', '7687648464','Servlet@Tomcat.com', N'đường thống nhất'),
 ('servlet', 1234, 'Servlet Tomcat Server', 'G', '7687648464','Servlet@Tomcat.com', 'Local host'),
 ('kevin', 1234, 'Kevin De Bruyne', 'G', '5612357564', 'kevin@mancity.com', 'Belgium'),
 ('ndungx', 1234, 'Nguyen Dung', 'G','3455645657', 'ndungx@gmail.com', 'Viet Nam'),
@@ -124,13 +125,15 @@ select * from dbo.Product
 select * from dbo.[Order]
 select * from dbo.[OrderDetail]
 
-insert into dbo.[Order]([userID], [date], total, [address])
-values('james',CURRENT_TIMESTAMP,1000000,'123/5 đường kha vạn cân');
+delete from [Order] where orderID = 60;
 
-delete from [Order] where userID = 'james'
+insert into dbo.[Order]([userID], [date], total, [address])
+values('james',CURRENT_TIMESTAMP,1000000,N'123/5 đường kha vạn cân');
+
+delete from [Order] where userID like 'dungnse%'
 DBCC CHECKIDENT ('[Order]', RESEED, 0);
 
-delete from [OrderDetail] where productID = 3;
+delete from [OrderDetail] where productID = 30;
 
 delete from [OrderDetail] where orderID = 8;
 
@@ -160,7 +163,7 @@ select [productName] as [productName]
 from dbo.[Product] 
 where productID = 1
 
-select * from dbo.[Product]
+select * from dbo.[User]
 
 delete from dbo.[User]
-where userID like 'dungnse%'
+where userID like 'dpr%'
