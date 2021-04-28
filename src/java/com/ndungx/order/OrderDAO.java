@@ -60,9 +60,11 @@ public class OrderDAO implements Serializable {
             con = DBUtils.makeConnection();
             if (con != null) {
                 String sql = "delete from dbo.[Order] "
-                        + "where orderID = ? ";
+                        + "where orderID = ?; "
+                        + "DBCC CHECKIDENT ('[Order]', RESEED, ?);";
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, orderID);
+                stm.setInt(2, orderID - 1);
                 int row = stm.executeUpdate();
                 if (row > 0) {
                     return true;
