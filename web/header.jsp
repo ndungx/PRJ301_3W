@@ -99,8 +99,10 @@
                         <p class="logoAD">NDungx</p>
                     </c:if>
                     <c:if test="${empty roleID or roleID eq 'G'}">
-                        <img src="image/lotus-flower-logo-icon-linear-style_126523-708.png"
+                        <a href="GetProductServlet">
+                            <img src="image/lotus-flower-logo-icon-linear-style_126523-708.png"
                              alt="Logo Bubble Tea" style="width: 70px">
+                        </a>
                     </c:if>
                 </div>
                 <div class="searchBar">
