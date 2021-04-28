@@ -28,6 +28,11 @@ body {
     -webkit-transition: all .3s;
 }
 
+.product-box-2:hover {
+    box-shadow: 0 5px 30px rgb(0 0 0 / 10%);
+    -webkit-transform: translateY(-5px);
+}
+
 .product-title {
     font-size: 20px;
     font-weight: 600;
