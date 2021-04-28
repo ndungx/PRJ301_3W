@@ -100,6 +100,10 @@ body {
     color: #777;
 }
 
+.required-field {
+    color: red;
+}
+
 .btn-google {
     color: white;
     background-color: #ea4335;
