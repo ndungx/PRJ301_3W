@@ -20,7 +20,7 @@ public class OrderDAO implements Serializable {
         return this.listOrder;
     }
 
-    public boolean addOrder(String userID, float total, String address)
+    public boolean addOrder(String userID, String shippingMethod, float total, String address)
             throws SQLException, NamingException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -28,12 +28,13 @@ public class OrderDAO implements Serializable {
         try {
             con = DBUtils.makeConnection();
             if (con != null) {
-                String sql = "insert into dbo.[Order]([userID], [date], total, [address]) "
-                        + "values(?, CURRENT_TIMESTAMP, ?, ?)";
+                String sql = "insert into dbo.[Order]([userID], [date], shippingMethod, total, [address]) "
+                        + "values(?, CURRENT_TIMESTAMP, ?, ?, ?)";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, userID);
-                stm.setFloat(2, total);
-                stm.setString(3, address);
+                stm.setString(2, shippingMethod);
+                stm.setFloat(3, total);
+                stm.setString(4, address);
 
                 int row = stm.executeUpdate();
                 if (row > 0) {

@@ -63,27 +63,30 @@
                         <div>
                             <div>
                                 <h5><b>Order Date:</b></h5>
-                                ${orderDate}
-                            </div>
-                            <div style="margin-top: 15px">
-                                <h5><b>Source:</b></h5>
-                                <p>Flower Shop Website</p>
+                                <jsp:useBean id="now" class="java.util.Date" scope="request" />
+                                <fmt:formatDate type="both" dateStyle="medium" 
+                                                timeStyle="medium"
+                                                value="${now}"></fmt:formatDate>
+                                </div>
+                                <div style="margin-top: 15px">
+                                    <h5><b>Source:</b></h5>
+                                    <p>Flower Shop Website</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <h6 class="text-uppercase" style="color: #B2B2B2; margin-top: 15px;"><b>HERE'S WHAT YOU ORDERED:</b></h6>
-                    <!--<hr style="color: #B2B2B2">-->
+                        <h6 class="text-uppercase" style="color: #B2B2B2; margin-top: 15px;"><b>HERE'S WHAT YOU ORDERED:</b></h6>
+                        <!--<hr style="color: #B2B2B2">-->
 
-                    <div class="row border-top border-bottom" style="padding-bottom: 2rem; margin-top: 15px;">
-                        <table style="width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th style="text-align: start">Product Name</th>
-                                    <th style="text-align: center">Quantity</th>
-                                    <th style="text-align: end">Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                        <div class="row border-top border-bottom" style="padding-bottom: 2rem; margin-top: 15px;">
+                            <table style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: start">Product Name</th>
+                                        <th style="text-align: center">Quantity</th>
+                                        <th style="text-align: end">Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                 <c:forEach var="dto" items="${map}">
                                     <c:set var="total" value="${total = total 
                                                                 + dto.value.price 
@@ -127,6 +130,8 @@
                     </div>  
                 </div>
             <c:remove var="CART"/>
+            <c:set var="SHIPPING_FEE" value="${sessionScope.SHIPPING_FEE}"/>
+            <c:remove var="SHIPPING_FEE"/>
         </c:if>
         <c:if test="${roleID eq 'AD'}">
             <div style="display: flex; flex-direction: column; align-items: center">

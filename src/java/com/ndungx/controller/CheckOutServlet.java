@@ -25,7 +25,7 @@ import org.apache.log4j.Logger;
 public class CheckOutServlet extends HttpServlet {
 
     private final String ERROR_PAGE = "error.jsp";
-    private static final String OUT_OF_STOCK_PAGE = "viewCart.jsp";
+    private static final String VIEW_CART_PAGE = "viewCart.jsp";
     private final String CHECKOUT_SUCCESS = "checkout.jsp";
     static final Logger LOGGER = Logger.getLogger(CheckOutServlet.class);
 
@@ -47,7 +47,7 @@ public class CheckOutServlet extends HttpServlet {
         String userID = request.getParameter("userID");
         String address = request.getParameter("address");
         String total = request.getParameter("total");
-        String shippingMethod = request.getParameter("cmbShippingMethod");
+        String shippingFee = request.getParameter("shippingFee");
 
         OrderDAO orderDAO = new OrderDAO();
         OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
@@ -55,58 +55,71 @@ public class CheckOutServlet extends HttpServlet {
         String url = ERROR_PAGE;
 
         try {
-            HttpSession session = request.getSession(false);
-            CartObj cart = (CartObj) session.getAttribute("CART");
-            Map<Integer, ProductDTO> items = cart.getCart();
+            if (Integer.parseInt(shippingFee) == 0) {
+                request.setAttribute("ERROR_SHIPPING_METHOD", "Please choose shipping method");
+                url = VIEW_CART_PAGE;
+            } else {
+                HttpSession session = request.getSession(false);
+                CartObj cart = (CartObj) session.getAttribute("CART");
+                Map<Integer, ProductDTO> items = cart.getCart();
+                
+                String shippingMethod;
+                if (Integer.parseInt(shippingFee) == 30000){
+                    shippingMethod = "Standard Delivery";
+                }else {
+                    shippingMethod = "Express Delivery";
+                }
 
-            boolean orderResult = orderDAO.addOrder(userID, Float.parseFloat(total) + Integer.parseInt(shippingMethod), address);
+                boolean orderResult = orderDAO.addOrder(userID, shippingMethod, Float.parseFloat(total) + Integer.parseInt(shippingFee), address);
 
-            int index = 0; //biến đếm số lượng hàng trong cart
-            for (Entry<Integer, ProductDTO> product : items.entrySet()) {
-                int orderID = orderDAO.getLastOrderID(userID);
-                int productID = product.getKey();
-                int quantity = product.getValue().getQuantity();
-                int quantityDB = orderDetailDAO.getQuantity(productID);
+                int index = 0; //biến đếm số lượng hàng trong cart
+                for (Entry<Integer, ProductDTO> product : items.entrySet()) {
+                    int orderID = orderDAO.getLastOrderID(userID);
+                    int productID = product.getKey();
+                    int quantity = product.getValue().getQuantity();
+                    int quantityDB = orderDetailDAO.getQuantity(productID);
 
-                index++;
-                if (quantityDB - quantity >= 0) {
-                    boolean orderDetailResult = orderDetailDAO.addOrderDetail(orderID, productID, quantity);
-                    if (orderResult && orderDetailResult) {
-                        orderDetailDAO.updateQuantity(productID, quantityDB - quantity);
-                        url = CHECKOUT_SUCCESS;
-                        request.setAttribute("ORDER_ID", orderID);
-                        String orderDate = orderDAO.getOrderDate(orderID);
-                        request.setAttribute("ORDER_DATE", orderDate);
-                        request.setAttribute("SHIPPING_ADDRESS", address);
-                        String productName = orderDAO.getProductName(productID);
-                        request.setAttribute("PRODUCT_NAME", productName);
-                        request.setAttribute("QUANTITY", quantity);
-                        request.setAttribute("PRICE", product.getValue().getPrice());
-                        request.setAttribute("SHIPPING_FEE", shippingMethod);
-                    }
-                } else {
-                    request.setAttribute("OUT_OF_STOCK", "Stock just have: " + quantityDB + " items! Please take less.");
-                    request.setAttribute("PRODUCT_ID", productID);
-                    //nếu là món hàng đầu lố quantity trong DB thì bỏ qua dòng if 
-                    // ở dưới và rollback order luôn vì chưa trừ quantity trong DB
-                    if (index > 1) {
-                        int indexRollBack = 0; //biến đếm để roll back lại quantity
-                        for (Entry<Integer, ProductDTO> productRollBack : items.entrySet()) {
-                            if (indexRollBack < items.size() - 1) {
-                                if (indexRollBack < index - 1) {
-                                    int productIDRollback = productRollBack.getKey();
-                                    int quantityRollBack = productRollBack.getValue().getQuantity();
-                                    int quantityDBRollBack = orderDetailDAO.getQuantity(productIDRollback);
-                                    orderDetailDAO.rollBackQuantity(productIDRollback, quantityDBRollBack + quantityRollBack);
-                                }
-                            }
-                            indexRollBack++;
+                    index++;
+                    if (quantityDB - quantity >= 0) {
+                        boolean orderDetailResult = orderDetailDAO.addOrderDetail(orderID, productID, quantity);
+                        if (orderResult && orderDetailResult) {
+                            orderDetailDAO.updateQuantity(productID, quantityDB - quantity);
+                            url = CHECKOUT_SUCCESS;
+                            request.setAttribute("ORDER_ID", orderID);
+                            String orderDate = orderDAO.getOrderDate(orderID);
+                            request.setAttribute("ORDER_DATE", orderDate);
+                            request.setAttribute("SHIPPING_ADDRESS", address);
+                            String productName = orderDAO.getProductName(productID);
+                            request.setAttribute("PRODUCT_NAME", productName);
+                            request.setAttribute("QUANTITY", quantity);
+                            request.setAttribute("PRICE", product.getValue().getPrice());
+                            request.setAttribute("SHIPPING_FEE", shippingFee);
                         }
+                        //hình như thiếu else ở đây (rollback cái gì đó :v)
+                    } else {
+                        request.setAttribute("OUT_OF_STOCK", "Stock just have: " + quantityDB + " items! Please take less.");
+                        request.setAttribute("PRODUCT_ID", productID);
+                        //nếu là món hàng đầu lố quantity trong DB thì bỏ qua dòng if 
+                        // ở dưới và rollback order luôn vì chưa trừ quantity trong DB
+                        if (index > 1) {
+                            int indexRollBack = 0; //biến đếm để roll back lại quantity
+                            for (Entry<Integer, ProductDTO> productRollBack : items.entrySet()) {
+                                if (indexRollBack < items.size() - 1) {
+                                    if (indexRollBack < index - 1) {
+                                        int productIDRollback = productRollBack.getKey();
+                                        int quantityRollBack = productRollBack.getValue().getQuantity();
+                                        int quantityDBRollBack = orderDetailDAO.getQuantity(productIDRollback);
+                                        orderDetailDAO.rollBackQuantity(productIDRollback, quantityDBRollBack + quantityRollBack);
+                                    }
+                                }
+                                indexRollBack++;
+                            }
+                        }
+                        orderDetailDAO.rollBackOrderDetail(orderDAO.getLastOrderID(userID));
+                        orderDAO.rollBackOrder(orderDAO.getLastOrderID(userID));
+                        url = VIEW_CART_PAGE;
+                        break;
                     }
-                    orderDetailDAO.rollBackOrderDetail(orderDAO.getLastOrderID(userID));
-                    orderDAO.rollBackOrder(orderDAO.getLastOrderID(userID));
-                    url = OUT_OF_STOCK_PAGE;
-                    break;
                 }
             }
         } catch (SQLException e) {

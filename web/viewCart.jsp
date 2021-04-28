@@ -113,25 +113,58 @@
                                 <div class="col text-right"><fmt:formatNumber maxFractionDigits="3">${total}</fmt:formatNumber> ₫</div>
                                 </div>
 
-                                <form action="DispatchServlet">
-                                    <input type="hidden" name="userID" value="${sessionScope.LOGIN_USER.userID}" />
+
+                                <p style="margin-bottom: 2%; margin-top: 1.2rem">SHIPPING METHOD</p> 
+
+                                <form action="ShippingMethodServlet" style="padding: 0px;">
+                                    <select name="cmbShippingMethod" onchange='if (this.value != 0) {
+                                                this.form.submit();
+                                            }'>
+                                        <option class="text-muted" value="0">Please Select Shipping Method</option>
+                                        <option class="text-muted" value="30000" ${requestScope.STANDARD_SHIPPING}>Standard Delivery - 30.000 ₫</option>
+                                    <option class="text-muted" value="50000" ${requestScope.EXPRESS_SHIPPING}>Express Delivery - 50.000 ₫</option>
+                                </select>
+                            </form>
+                            <c:if test="${not empty requestScope.ERROR_SHIPPING_METHOD}">
+                                <p style="color: red;">${requestScope.ERROR_SHIPPING_METHOD}</p>
+                            </c:if>
+
+                            <form action="DispatchServlet" style="margin-top: 1.2rem; padding: 0px">
+                                <input type="hidden" name="userID" value="${sessionScope.LOGIN_USER.userID}"/>
                                 <input type="hidden" name="address" value="${address}" />
                                 <input type="hidden" name="total" value="${total}" />
-                                <p style="margin-bottom: 2%">SHIPPING METHOD</p> 
-                                <select name="cmbShippingMethod">
-                                    <option class="text-muted" value="30000" selected>Standard Delivery - 30.000 ₫</option>
-                                    <!--<option class="text-muted" value="50000">Express Delivery - 50.000 ₫</option>-->
-                                </select>
-                                <p style="margin-top: 5%; margin-bottom: 2%">SHIPPING ADDRESS</p> 
+                                <c:if test="${not empty requestScope.SHIPPING_FEE}">
+                                    <input type="hidden" name="shippingFee" value="${requestScope.SHIPPING_FEE}" />
+                                </c:if>
+                                <c:if test="${empty requestScope.SHIPPING_FEE}">
+                                    <input type="hidden" name="shippingFee" value="0" />
+                                </c:if>
+                                <c:if test="${not empty requestScope.SHIPPING_METHOD_ERROR}">
+                                    <p style="color: red;">${requestScope.SHIPPING_METHOD_ERROR}</p>
+                                </c:if>
+                                <div>
+                                    <!--                                    <p style="margin-top: 1.2rem; margin-bottom: 2%;">DISCOUNT CODE</p> 
+                                                                        <div style="display: flex;">
+                                                                            <input id="code" placeholder="Enter your code">
+                                                                            <button type="submit" name="btAction" 
+                                                                                    value="Discount" style="width: 4rem; margin-left: 0.5rem"
+                                                                                    class="btn btn-primary">Apply
+                                                                            </button>
+                                                                        </div>-->
+                                </div>
+                                <p style="margin-top: 1.2rem; margin-bottom: 2%">SHIPPING ADDRESS</p> 
                                 <b>${address}</b>
                                 <br>
                                 <br>
+                                <c:set var="SHIPPING_FEE" value="${requestScope.SHIPPING_FEE}"/>
                                 <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
                                     <div class="col">TOTAL PRICE</div>
-                                    <div class="col text-right"><fmt:formatNumber maxFractionDigits="3">${total + 30000}</fmt:formatNumber> ₫</div>
+                                    <div class="col text-right"><fmt:formatNumber maxFractionDigits="3">${total + SHIPPING_FEE}</fmt:formatNumber> ₫</div>
                                     </div> 
                                 <c:if test="${not empty loginUser}">
-                                    <button class="checkoutButton" style="cursor: pointer" type="submit" name="btAction" value="Checkout">CHECKOUT</button>
+                                    <button class="btn btn-dark btn-block" style="cursor: pointer" 
+                                            type="submit" name="btAction" 
+                                            value="Checkout">CHECKOUT</button>
                                 </c:if>
                                 <c:if test="${empty loginUser}">
                                     <div style="display: flex; justify-content: center">
