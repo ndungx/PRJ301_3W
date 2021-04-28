@@ -10,5 +10,6 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+Recycle Bin/
 
 # End of https://www.toptal.com/developers/gitignore/api/netbeans
