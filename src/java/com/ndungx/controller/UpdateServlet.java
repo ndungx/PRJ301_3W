@@ -39,6 +39,7 @@ public class UpdateServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        request.setCharacterEncoding("UTF-8");
 
         String userID = request.getParameter("userID");
         String fullname = request.getParameter("fullname");
@@ -47,7 +48,7 @@ public class UpdateServlet extends HttpServlet {
         String email = request.getParameter("email");
         String address = request.getParameter("address");
         String password = "";
-        UserDTO dto = new UserDTO(userID, fullname, roleID, phone, email, address, password);
+        UserDTO dto = new UserDTO(userID, fullname, roleID, password, phone, email, address);
         UserDAO dao = new UserDAO();
         UserUpdateErrorsDTO error = new UserUpdateErrorsDTO();
         boolean foundErr = false;
