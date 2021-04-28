@@ -24,6 +24,7 @@ public class StartupServlet extends HttpServlet {
 
     private final String LOGIN_PAGE = "index.html";
     private final String SEARCH_PAGE = "search.jsp";
+    private static final String SHOPPING_PAGE = "GetProductServlet";
     static final Logger LOGGER = Logger.getLogger(StartupServlet.class);
 
     /**
@@ -55,10 +56,15 @@ public class StartupServlet extends HttpServlet {
                     UserDAO dao = new UserDAO();
                     UserDTO dto = dao.checkLogin(userID, password);
                     if (dto != null) {
-                        url = SEARCH_PAGE;
                         HttpSession session = request.getSession(true);
-                        String fullname = dto.getFullname();
-                        session.setAttribute("FULLNAME", fullname);
+                        session.setAttribute("LOGIN_USER", dto);
+                        url = SEARCH_PAGE;
+                        if (dto.getRoleID().equals("AD")) {
+                            url = SEARCH_PAGE;
+                        }
+                        if (dto.getRoleID().equals("G")) {
+                            url = SHOPPING_PAGE;
+                        }
                     }//end if user valid
                 }//end for
             }//end if cookies existed
