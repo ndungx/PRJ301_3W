@@ -7,6 +7,8 @@ import com.ndungx.user.UserDTO;
 import com.ndungx.valivation.Validation;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
@@ -55,6 +57,9 @@ public class CreateGoogleAccountServlet extends HttpServlet {
             String phone = request.getParameter("phone");
             String email = (String) session.getAttribute("USER_ID");
             String address = request.getParameter("address");
+            //process change to national character (UTF-8)
+            byte[] bytes = address.getBytes(StandardCharsets.ISO_8859_1);
+            address = new String(bytes, StandardCharsets.UTF_8);
 
             UserDAO dao = new UserDAO();
             UserCreateErrorDTO error = new UserCreateErrorDTO("", "", "", "", "", "", "", "", "");
@@ -85,10 +90,10 @@ public class CreateGoogleAccountServlet extends HttpServlet {
         } catch (NamingException e) {
             LOGGER.error(e.getMessage());
             log("CreateGoogleAccountServlet _ Naming: " + e.getMessage());
-        } catch(Exception e){
+        } catch (Exception e) {
             LOGGER.error(e.getMessage());
             log("CreateGoogleAccountServlet _ Exception: " + e.getMessage());
-        }finally {
+        } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
             out.close();
