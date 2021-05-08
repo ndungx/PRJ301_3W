@@ -9,10 +9,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <![endif]-->
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -25,9 +21,6 @@
         <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous">
     </head>
     <body>
-        <!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
         <c:set var="cookies" value="${cookie}"/>
         <c:if test="${not empty cookies}">
             <c:set var="username" value=""/>
@@ -41,24 +34,20 @@
                 <jsp:forward page="StartupServlet" />
             </c:if>
         </c:if>
-        
+
         <c:set var="loginUser" value="${sessionScope.LOGIN_USER.fullname}"/>
         <c:set var="roleID" value="${sessionScope.LOGIN_USER.roleID}"/>
 
-        <c:if test="${roleID ne 'AD' and empty loginUser}">
-            <div style="display: flex; flex-direction: column; align-items: center">
-                <h1>Permission Denied</h1>
-                <a href="GetProductServlet" style="text-decoration: none;">Click Here to get back to Shopping</a>
-            </div>
+        <c:if test="${(roleID ne 'AD' and roleID ne 'M') or empty loginUser}">
+            <c:redirect url="GetProductServlet"></c:redirect>
         </c:if>
 
-        <c:if test="${not empty loginUser and roleID eq 'AD'}">
+        <c:if test="${not empty loginUser and (roleID eq 'AD' or roleID eq 'M')}">
             <jsp:include page="header.jsp"></jsp:include>
                 <div class="box">
                     <!-- Upper -->
                     <div class="upper">
-                        <h1>User Management</h1>
-
+                        <h1 style="margin-top: 2rem;">User Management</h1>
                     </div>
                     <!-- Table -->
                 <c:set var="searchValue" value="${param.Search}"/>
@@ -92,8 +81,19 @@
                                             ${user.userID}
                                         </td>
                                         <td>
-                                            <input type="text" name="fullname" 
-                                                   value="${user.fullname}" autocomplete="off"/>
+                                            <c:if test="${roleID eq 'M'}">
+                                                <input type="text" name="fullname" 
+                                                       value="${user.fullname}" autocomplete="off"/>
+                                            </c:if>
+                                            <c:if test="${roleID eq 'AD'}">
+                                                <c:if test="${user.roleID eq 'G' or user.roleID eq 'AD'}">
+                                                    <input type="text" name="fullname" 
+                                                           value="${user.fullname}" autocomplete="off"/>
+                                                </c:if>
+                                                <c:if test="${user.roleID eq 'M'}">
+                                                    ${user.fullname}
+                                                </c:if>
+                                            </c:if>
                                             <br>
                                             <c:if test="${(not empty sessionScope.UPDATE_ERROR.fullnameLengthErr) and (user.fullname eq sessionScope.UPDATE_ERROR_FULLNAME)}">
                                                 <font color="red">
@@ -102,16 +102,30 @@
                                             </c:if>
                                         </td>
                                         <td>
-                                            <input type="text" name="roleID" 
-                                                   value="${user.roleID}" autocomplete="off"/>
+                                            <c:if test="${roleID eq 'M'}">
+                                                <input type="text" name="roleID" 
+                                                       value="${user.roleID}" autocomplete="off"
+                                                       style="width: 50px"/>
+                                            </c:if>
+
+                                            <c:if test="${roleID eq 'AD'}">
+                                                <c:if test="${user.roleID eq 'G'}">
+                                                    <input type="text" name="roleID" 
+                                                           value="${user.roleID}" autocomplete="off"
+                                                           style="width: 50px"/>
+                                                </c:if>
+                                                <c:if test="${user.roleID eq 'AD' or user.roleID eq 'M'}">
+                                                    ${user.roleID}
+                                                </c:if>
+                                            </c:if>
                                             <br>
                                             <c:if test="${(not empty sessionScope.UPDATE_ERROR.roleIDLengthErr) and (user.fullname eq sessionScope.UPDATE_ERROR_FULLNAME)}">
                                                 <font color="red">
                                                 ${sessionScope.UPDATE_ERROR.roleIDLengthErr}
                                                 </font>
+                                                <c:remove var="UPDATE_ERROR"/>
+                                                <c:remove var="UPDATE_ERROR_USERNAME"/>
                                             </c:if>
-                                            <c:remove var="UPDATE_ERROR"/>
-                                            <c:remove var="UPDATE_ERROR_USERNAME"/>
                                         </td>
                                         <td>
                                             ${user.password}
