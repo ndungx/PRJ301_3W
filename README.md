@@ -39,8 +39,8 @@
 	- [ ] Discount Code  
 	- [ ] ...  
 
-Any problem or help me to improve project, please contact me via: 
-[Facebook](https://www.facebook.com/ndungx)
-[Gmail](mailto:dpron12345@gmail.com)
+Any problem or help me to improve project, please contact me via:  
+[Facebook](https://www.facebook.com/ndungx)  
+[Gmail](mailto:dpron12345@gmail.com)  
 
 © 2021 ndungx
