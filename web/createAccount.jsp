@@ -35,7 +35,8 @@
                                     <div class="form-label-group">
                                         <input type="text" id="inputUserID" 
                                                name="userID" value="${param.userID}" class="form-control" 
-                                               placeholder="User ID" required autofocus>
+                                               placeholder="User ID" required autofocus
+                                               minlength="3" maxlength="10">
                                         <label for="inputUserID">User ID <span class="required-field">*</span></label>
                                     </div>
                                     <c:if test="${not empty error.userIDError}">
@@ -47,7 +48,8 @@
                                     <div class="form-label-group">
                                         <input type="text" id="inputFullName" 
                                                name="fullname" value="${param.fullname}" class="form-control" 
-                                               placeholder="Full Name" required autofocus>
+                                               placeholder="Full Name" required autofocus
+                                               minlength="5" maxlength="50">
                                         <label for="inputFullName">Full name <span class="required-field">*</span></label>
                                     </div>
                                     <c:if test="${not empty error.fullnameError}">
@@ -59,7 +61,8 @@
                                     <div class="form-label-group">
                                         <input type="phone" id="inputPhone" 
                                                name="phone" value="${param.phone}" class="form-control" 
-                                               placeholder="Phone Number" required>
+                                               placeholder="Phone Number" required 
+                                               minlength="10" maxlength="12" pattern="^\+?(\d.*){10,12}$">
                                         <label for="inputPhoneNumber">Phone Number <span class="required-field">*</span></label>
                                     </div>
                                     <c:if test="${not empty error.phoneError}">
@@ -83,7 +86,8 @@
                                     <div class="form-label-group">
                                         <input type="address" id="inputAddress" 
                                                name="address" value="${param.address}" class="form-control" 
-                                               placeholder="Address" required>
+                                               placeholder="Address" required
+                                               minlength="4" maxlength="100">
                                         <label for="inputAddress">Address <span class="required-field">*</span></label>
                                     </div>
                                     <c:if test="${not empty error.addressError}">
@@ -95,7 +99,8 @@
                                     <div class="form-label-group">
                                         <input type="password" id="inputPassword" 
                                                name="password" class="form-control" 
-                                               placeholder="Password" required>
+                                               placeholder="Password" required
+                                               minlength="4" maxlength="20">
                                         <label for="inputPassword">Password <span class="required-field">*</span></label>
                                     </div>
                                     <c:if test="${not empty error.passwordError}">
@@ -107,7 +112,8 @@
                                     <div class="form-label-group">
                                         <input type="password" id="inputConfirmPassword" 
                                                name="confirm" class="form-control" 
-                                               placeholder="Confirm password" required>
+                                               placeholder="Confirm password" required
+                                               minlength="4" maxlength="20">
                                         <label for="inputConfirmPassword">Confirm password <span class="required-field">*</span></label>
                                     </div>
                                     <c:if test="${not empty error.confirmError}">
