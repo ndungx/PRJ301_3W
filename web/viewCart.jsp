@@ -11,7 +11,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>View Shopping Cart</title>
@@ -23,7 +23,7 @@
         <c:set var="loginUser" value="${sessionScope.LOGIN_USER.fullname}"/>
         <c:set var="roleID" value="${sessionScope.LOGIN_USER.roleID}"/>
         <c:set var="address" value="${sessionScope.LOGIN_USER.address}"/>
-        <c:if test="${empty roleID or roleID ne 'AD'}">
+        <c:if test="${empty roleID or (roleID ne 'AD' and roleID ne 'M')}">
             <jsp:include page="header.jsp"></jsp:include>
             <c:set var="cart" value="${sessionScope.CART}"/>
             <c:if test="${empty cart.cart}">
@@ -57,7 +57,7 @@
                             </div>
                             <div class="row border-top border-bottom">
                                 <c:forEach var="dto" items="${map}">
-                                    <form action="DispatchServlet" style="display: flex;">
+                                    <form action="DispatchServlet">
                                         <c:set var="total" value="${total 
                                                                     = total 
                                                                     + dto.value.price 
@@ -192,7 +192,7 @@
                 </div>
             </c:if>
         </c:if>
-        <c:if test="${roleID eq 'AD'}">
+        <c:if test="${roleID eq 'AD' or roleID eq 'M'}">
             <div style="display: flex; flex-direction: column; align-items: center">
                 <h1>Administrator Can't Buy</h1>
                 <a href="search.jsp" style="text-decoration: none;">Click here to back to User Management</a>
