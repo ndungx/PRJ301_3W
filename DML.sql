@@ -61,7 +61,7 @@ create table dbo.OrderDetail (
 );
 
 
-DBCC CHECKIDENT ('[Category]', RESEED, 0); --hàm này để reset identity khi đã delete row (empty table)
+DBCC CHECKIDENT ('[Category]', RESEED, 0); --hàm này để reset identity về số mình chọn
 delete from dbo.Category where categoryName like 'hoa%'
 
 insert into dbo.Category(categoryName)
@@ -121,6 +121,7 @@ values
 ('My Juliet', 329000, 100, 6, 'https://assets.flowerstore.vn/uploads/products/photos/G5AXLedfDA9QfXhelb4U7WASGJNGAjqcbJMY4c0U.jpeg'),
 ('Intense Love', 69000, 100, 6, 'https://assets.flowerstore.vn/uploads/products/photos/QvW53IgUu7IaP7Vk5PMRGfapEPlNHEr7VAFPC88T.jpeg');
 
+select * from dbo.[Category]
 select * from dbo.Product
 select * from dbo.[Order]
 select * from dbo.[OrderDetail]
