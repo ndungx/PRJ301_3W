@@ -7,7 +7,6 @@ import com.ndungx.user.UserDAO;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.naming.NamingException;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,8 +23,8 @@ public class LoginGoogleServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final String ERROR_PAGE = "error.jsp";
     private static final String LOGIN_FAIL_PAGE = "loginfail.html";
-    private static final String CREATE_ACCOUNT_GOOGLE_PAGE = "createAccount.jsp";
-    private static final String LOGIN_GOOGLE_CONTROLLER = "LoginWithGoogleServlet";
+    private static final String CREATE_ACCOUNT_GOOGLE_PAGE = "redirectCreateAccount.jsp";
+    private static final String LOGIN_GOOGLE_CONTROLLER = "redirectLoginGoogle.jsp";
     static final Logger LOGGER = Logger.getLogger(LoginServlet.class);
 
     public LoginGoogleServlet() {
