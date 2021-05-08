@@ -13,7 +13,8 @@
 - Try to create DB and manipulate with DML file in project folder
 - Change username and password of your DBMS in _context.xml_
 
-* Requirement of PRJ301's Assignment:  
+### Requirement of PRJ301 Assignment
+* Functional Requirement:  
 	- [x] Create User  
 	- [x] Search User
 	- [x] Update User  
