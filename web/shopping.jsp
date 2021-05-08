@@ -19,7 +19,7 @@
     <body>
         <c:set var="loginUser" value="${sessionScope.LOGIN_USER.fullname}"/>
         <c:set var="roleID" value="${sessionScope.LOGIN_USER.roleID}"/>
-        <c:if test="${empty roleID or roleID ne 'AD'}">
+        <c:if test="${empty roleID or (roleID ne 'AD' and roleID ne 'M')}">
             <jsp:include page="header.jsp"></jsp:include>
                 <div class="box">
                     <h3 style="padding-left: 15px;padding-top: 15px">All Product</h3>
@@ -28,7 +28,7 @@
                     <c:forEach var="dto" items="${requestScope.PRODUCT_LIST}" varStatus="counter">
                         <div class="col-xl-2 my-2 col-lg-3 col-md-4 col-6">
                             <div class="product-box-2 h-100 bg-white position-relative  " id="product-card">
-                                <!--<a class="position-absolute h-100 w-100" style="z-index: 3" href="#"></a> --> <%-- trang này dẫn vào view product --%>
+                                <!--<a class="position-absolute h-100 w-100" style="z-index: 3" href="ViewProductServlet"></a> --> <%-- trang này dẫn vào view product --%>
 
                                 <div id="loaded" data-src="${dto.image}" style="padding-bottom: 100%; background: url(${dto.image}) no-repeat center / cover;"></div>
                                 <div class="p-3 border-top">
@@ -63,7 +63,7 @@
                 </div>
             </div>
         </c:if>
-        <c:if test="${roleID eq 'AD'}">
+        <c:if test="${roleID eq 'AD' or roleID eq 'M'}">
             <div style="display: flex; flex-direction: column; align-items: center">
                 <h1>Administrator Can't Buy</h1>
                 <a href="search.jsp" style="text-decoration: none;">Click here to back to User Management</a>
