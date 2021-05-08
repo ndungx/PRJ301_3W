@@ -31,7 +31,7 @@
 * Extra: 
     - [x] Log4j  
     - [x] Login Google and Shopping  
-    - [ ] Order confirmation through email  
+    - [ ] Order Invoice sent through email  
     - [ ] Payment Method (ZaloPay, Momo, Paypal, ...)  
 
 * Some Addition Function:
@@ -39,6 +39,8 @@
 	- [ ] Discount Code  
 	- [ ] ...  
 
-Contact me via [Facebook](https://www.facebook.com/ndungx)
+Any problem or help me to improve project, please contact me via: 
+[Facebook](https://www.facebook.com/ndungx)
+[Gmail](mailto:dpron12345@gmail.com)
 
 © 2021 ndungx
