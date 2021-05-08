@@ -12,8 +12,6 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
-    <body>
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Kaushan%20Script:wght@200;300;400;500;600;700;800;900&display=swap');
             header {
@@ -35,6 +33,8 @@
                 font-family: 'Kaushan Script';
                 font-weight: 700;
                 font-size: 30px;
+                margin: 0px;
+                margin-top: 5px;
             }
 
             .logo img {
@@ -89,13 +89,15 @@
                 color: white;
             }
         </style>
+    </head>
+    <body>
         <c:set var="loginUser" value="${sessionScope.LOGIN_USER.fullname}"/>
         <c:set var="roleID" value="${sessionScope.LOGIN_USER.roleID}"/>
         <c:set var="cart" value="${sessionScope.CART}"/>
         <header>
             <div class="HeaderBox">
                 <div class="logo">
-                    <c:if test="${roleID eq 'AD'}">
+                    <c:if test="${roleID eq 'AD' or roleID eq 'M'}">
                         <p class="logoAD">NDungx</p>
                     </c:if>
                     <c:if test="${empty roleID or roleID eq 'G'}">
@@ -106,21 +108,21 @@
                     </c:if>
                 </div>
                 <div class="searchBar">
-                    <c:if test="${roleID eq 'AD'}">
+                    <c:if test="${roleID eq 'AD' or roleID eq 'M'}">
                         <form action="DispatchServlet">
                             <input type="text" placeholder="Search User" id="search" 
                                    name="Search" value="${param.Search}"/>
                             <button class="btn btn-primary" type="submit" 
                                     name="btAction" value="Search"
-                                    style="margin-top: -4px; padding: 9px 12px">
+                                    style="margin-top: -4px;">
                                 <i class="fas fa-search"></i>
                             </button>
                         </form>
                     </c:if>
                 </div>
-                <c:if test="${not empty loginUser }">
+                <c:if test="${not empty loginUser}">
                     <div class="user">
-                        <c:if test="${roleID ne 'AD'}">
+                        <c:if test="${roleID ne 'AD' and roleID ne 'M'}">
                             <c:set var="map" value="${cart.cart}"/>
                             <div class="navbar-right">
                                 <a href="viewCart.jsp" class="cart" style="text-decoration: none">
@@ -143,7 +145,7 @@
                 </c:if>
                 <c:if test="${empty loginUser}">
                     <div class="user">
-                        <c:if test="${roleID ne 'AD'}">
+                        <c:if test="${roleID ne 'AD' and roleID ne 'M'}">
                         <c:set var="map" value="${cart.cart}"/>
                         <div class="navbar-right">
                             <a href="viewCart.jsp" class="cart" style="text-decoration: none">
