@@ -59,7 +59,7 @@ public class LoginWithGoogleServlet extends HttpServlet {
             if (dto != null) {
                 session.setAttribute("LOGIN_USER", dto);
                 url = SEARCH_PAGE;
-                if (dto.getRoleID().equals("AD")) {
+                if (dto.getRoleID().equals("AD") || dto.getRoleID().equals("M")) {
                     url = SEARCH_PAGE;
                 }
                 if (dto.getRoleID().equals("G")) {
