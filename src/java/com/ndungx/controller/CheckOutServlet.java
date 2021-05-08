@@ -62,11 +62,11 @@ public class CheckOutServlet extends HttpServlet {
                 HttpSession session = request.getSession(false);
                 CartObj cart = (CartObj) session.getAttribute("CART");
                 Map<Integer, ProductDTO> items = cart.getCart();
-                
+
                 String shippingMethod;
-                if (Integer.parseInt(shippingFee) == 30000){
+                if (Integer.parseInt(shippingFee) == 30000) {
                     shippingMethod = "Standard Delivery";
-                }else {
+                } else {
                     shippingMethod = "Express Delivery";
                 }
 
@@ -94,15 +94,14 @@ public class CheckOutServlet extends HttpServlet {
                             request.setAttribute("QUANTITY", quantity);
                             request.setAttribute("PRICE", product.getValue().getPrice());
                             request.setAttribute("SHIPPING_FEE", shippingFee);
-                        }
-                        //hình như thiếu else ở đây (rollback cái gì đó :v)
+                        } //end if add to Order and OrderDetail table success
                     } else {
                         request.setAttribute("OUT_OF_STOCK", "Stock just have: " + quantityDB + " items! Please take less.");
                         request.setAttribute("PRODUCT_ID", productID);
-                        //nếu là món hàng đầu lố quantity trong DB thì bỏ qua dòng if 
-                        // ở dưới và rollback order luôn vì chưa trừ quantity trong DB
+                        // not rollback quantity if 1st item exceed quantity 
+                        //in DB because it hasn't subtract quantity in DB yet
                         if (index > 1) {
-                            int indexRollBack = 0; //biến đếm để roll back lại quantity
+                            int indexRollBack = 0; //count variable to rollback quantity
                             for (Entry<Integer, ProductDTO> productRollBack : items.entrySet()) {
                                 if (indexRollBack < items.size() - 1) {
                                     if (indexRollBack < index - 1) {
@@ -114,7 +113,7 @@ public class CheckOutServlet extends HttpServlet {
                                 }
                                 indexRollBack++;
                             }
-                        }
+                        } //end if rollback quantity if user enter quantity exceed quantity in DB
                         orderDetailDAO.rollBackOrderDetail(orderDAO.getLastOrderID(userID));
                         orderDAO.rollBackOrder(orderDAO.getLastOrderID(userID));
                         url = VIEW_CART_PAGE;
@@ -146,6 +145,9 @@ public class CheckOutServlet extends HttpServlet {
         } catch (NamingException e) {
             LOGGER.error(e.getMessage());
             log("CheckOutServlet _ Naming: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            LOGGER.error(e.getMessage());
+            log("CheckOutServlet _ NumberFormatException: " + e.getMessage());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
