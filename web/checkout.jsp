@@ -14,7 +14,6 @@
         <title>Check out Successfully</title>
         <link href="https://netdna.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous">
-        <!--<link rel="stylesheet" href="css/checkout.css">-->
     </head>
     <body style="background-color: #F1F1F1;">
         <c:set var="roleID" value="${sessionScope.LOGIN_USER.roleID}"/>
@@ -34,13 +33,13 @@
                 <c:set var="cart" value="${sessionScope.CART}"/>
                 <c:set var="map" value="${cart.cart}"/>
 
-                <div class="logoThankYou" style="display: flex; align-items: center; flex-direction: column;margin-bottom: 3%;margin-top: 3%;">
+                <div style="display: flex; align-items: center; flex-direction: column;margin-bottom: 3%;margin-top: 3%;">
                     <img src="image/lotus-flower-logo-icon-linear-style_126523-708.png" style="max-width: 10%">    
                     <h1><b>Thank You.</b></h1>
                 </div>
-                <div class="box" style="display: flex; flex-direction: column; align-items: center;margin-left: 20%;margin-right: 20%;padding-bottom: 5%;background-color: white;margin-bottom: 10%;">
-                    <div class="boxInvoice" style="margin-left: 0px; margin-right: 0px;">
-                        <div class="topInvoice" style="display: flex; flex-direction: column; align-items: center; margin-top: 2rem;">
+                <div style="display: flex; flex-direction: column; align-items: center;margin-left: 20%;margin-right: 20%;padding-bottom: 5%;background-color: white;margin-bottom: 10%;">
+                    <div style="margin-left: 0px; margin-right: 0px;">
+                        <div style="display: flex; flex-direction: column; align-items: center; margin-top: 2rem;">
                             <h5><b>Hi, ${fullname}</b></h5>
                             <p>Thanks for your purchase from Flower Shop</p>
                             <br>
@@ -128,7 +127,7 @@
                             <a href="GetProductServlet">
                                 &leftarrow;&nbsp;<span style="color: #007bff">Back to shop</span>
                             </a>
-                        </div>  
+                        </div>
                     </div>
                 <c:remove var="CART"/>
                 <c:set var="SHIPPING_FEE" value="${sessionScope.SHIPPING_FEE}"/>
