@@ -129,7 +129,7 @@
                                 <div>
                                     <div class="btn-google">
                                         <a class="button" href="https://accounts.google.com/o/oauth2/auth?scope=profile email&redirect_uri=http://localhost:8084/PRJ301_3W/login-google&response_type=code
-                                           &client_id=225456220013-28j92le9f9urd61mjsc1vd8khnc1vuad.apps.googleusercontent.com&approval_prompt=force" 
+                                           &client_id=988633577351-53udkaq470dc83hmmd5vghr3mma0daqs.apps.googleusercontent.com&approval_prompt=force" 
                                            class="fb-btn" style="text-decoration: none"><i class="fab fa-google mr-2"></i> Sign in with Google</a> 
                                     </div>
                                     <br>
@@ -154,7 +154,7 @@
                                 <h5 class="card-title text-center">Additional Information</h5>
                                 <form class="form-signin" action="DispatchServlet" method="POST">
                                     <c:set var="error" value="${requestScope.ERROR}"/>
-                                    
+
                                     <div class="form-label-group">
                                         <input type="phone" id="inputPhone" 
                                                name="phone" value="${param.phone}" class="form-control" 
@@ -178,7 +178,7 @@
                                         ${error.addressError}<br>
                                         </font>
                                     </c:if>
-                                        
+
                                     <button class="btn btn-lg btn-primary btn-block text-uppercase" 
                                             style="margin-top: 1rem" 
                                             type="submit" 
