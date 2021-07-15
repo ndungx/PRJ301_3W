@@ -116,6 +116,8 @@
                                                 </c:if>
                                                 <c:if test="${user.roleID eq 'AD' or user.roleID eq 'M'}">
                                                     ${user.roleID}
+                                                    <input type="hidden" name="roleID" 
+                                                           value="${user.roleID}"/>
                                                 </c:if>
                                             </c:if>
                                             <br>
