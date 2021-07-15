@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <welcome-file-list>
         <welcome-file>
             GetProductServlet
@@ -21,9 +19,6 @@
             30
         </session-timeout>
     </session-config>
-    <display-name>
-        Log4j
-    </display-name>
     <context-param>
         <param-name>log4j-config-location</param-name>
         <param-value>/WEB-INF/log4j.properties</param-value>
@@ -36,4 +31,10 @@
         <error-code>500</error-code>
         <location>/InternalServerError.html</location>
     </error-page>
+    <resource-ref>
+        <res-ref-name>DS</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Container</res-auth>
+        <res-sharing-scope>Shareable</res-sharing-scope>
+    </resource-ref>
 </web-app>
