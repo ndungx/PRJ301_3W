@@ -1,0 +1,136 @@
+/* 
+    Created on : Apr 28, 2021, 6:35:38 PM
+    Author     : NDungx
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Lato', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    /*height: 100vh;*/
+    /*overflow: hidden;*/
+    background-color: #F3F3F3 !important;
+}
+
+.box {
+    margin-left: 60px;
+    margin-right: 60px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 2rem;
+    box-shadow: 1px 5px 24px 0.3 rgba(235, 235, 235, 1);
+    margin-top: 2%;
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.1)!important;
+    background-color: white;
+    margin-bottom: 5%;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.row:after, .row:before {
+    box-sizing: border-box;
+}
+
+.col-6 {
+    width: 50%;
+    position: relative;
+}
+
+.fullheight {
+    height: 100vh;
+}
+
+.product-img {
+    position: absolute;
+    top: 50%;
+    left: 67%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+}
+
+.img-wrapper img {
+    height: auto;
+    width: 70%;
+    transform: rotate(342deg);
+}
+
+.product-info {
+    width: 100%;
+    padding: 0 10%;
+    color: #bdc3c7;
+}
+
+.info-wrapper {
+    margin: auto;
+    position: relative;
+    text-align: left;
+    margin-top: 3rem;
+}
+
+.product-name h2 {
+    font-weight: 900;
+    font-size: xxx-large;
+    color: black;
+}
+
+.product-price {
+    font-weight: 900;
+    font-size: xx-large;
+    color: black;
+}
+
+.product-description {
+    margin: 60px 0;
+    text-align: justify;
+    font-weight: 600;
+}
+
+.button > button {
+    font-weight: 900;
+    font-size: x-large;
+    padding: 15px 60px;
+    border-radius: 30px;
+    border: 2px solid black;
+    background-color: white;
+    color: black;
+    transition: .5s;
+}
+
+.button > button:hover {
+    cursor: pointer;
+    background-color: black;
+    color: white;
+}
+
+.img-col {
+    border-bottom-left-radius: 100%;
+}
+
+.bounce {
+    animation-name: bounce;
+    animation-timing-function: ease;
+    animation-iteration-count: infinite;
+    animation-duration: 3s;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    } 50% {
+        transform: translateY(-50px);
+    } 100% {
+        transform: translateY(0);
+    }
+}
