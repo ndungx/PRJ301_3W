@@ -3,5 +3,5 @@
     <Resource name="DS" auth="Container" type="javax.sql.DataSource"
               driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
               url="jdbc:sqlserver://localhost:1433;databaseName=FlowerManagement"
-              username="sa" password="123456789"/>
+              username="sa" password="1234"/>
 </Context>
