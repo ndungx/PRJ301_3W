@@ -96,7 +96,11 @@ public class CheckOutServlet extends HttpServlet {
                             request.setAttribute("SHIPPING_FEE", shippingFee);
                         } //end if add to Order and OrderDetail table success
                     } else {
-                        request.setAttribute("OUT_OF_STOCK", "Stock just have: " + quantityDB + " items! Please take less.");
+                        if (quantityDB == 0) {
+                            request.setAttribute("OUT_OF_STOCK", "This product out of stock! Please select another.");
+                        } else {
+                            request.setAttribute("OUT_OF_STOCK", "Stock just have: " + quantityDB + " items! Please take less.");
+                        }
                         request.setAttribute("PRODUCT_ID", productID);
                         // not rollback quantity if 1st item exceed quantity 
                         //in DB because it hasn't subtract quantity in DB yet
