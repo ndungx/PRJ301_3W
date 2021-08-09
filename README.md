@@ -17,17 +17,17 @@
 <details>
 	<summary>Some Screenshot</summary>
       <p>Login Page</p>
-      <img src="https://github.com/ndungx/SWP391-LMSU/tree/main/images/login-page.png">
+      <img src="https://github.com/ndungx/PRJ301_3W/blob/main/images/login-page.png">
       <p>Create Account Page</p>
-      <img src="https://github.com/ndungx/SWP391-LMSU/tree/main/images/create-account-page.png">
+      <img src="https://github.com/ndungx/PRJ301_3W/blob/main/images/create-account-page.png">
       <p>Home Page</p>
-      <img src="https://github.com/ndungx/SWP391-LMSU/tree/main/images/home-page.png">
+      <img src="https://github.com/ndungx/PRJ301_3W/blob/main/images/home-page.png">
       <p>View Cart Page</p>
-      <img src="https://github.com/ndungx/SWP391-LMSU/tree/main/images/view-cart-page.png">
+      <img src="https://github.com/ndungx/PRJ301_3W/blob/main/images/view-cart-page.png">
       <p>Invoice Page</p>
-      <img src="https://github.com/ndungx/SWP391-LMSU/tree/main/images/invoice-page.jpeg">
+      <img src="https://github.com/ndungx/PRJ301_3W/blob/main/images/invoice-page.jpeg">
       <p>User Management Page</p>
-      <img src="https://github.com/ndungx/SWP391-LMSU/tree/main/images/user-management-page.jpeg">
+      <img src="https://github.com/ndungx/PRJ301_3W/blob/main/images/user-management-page.jpeg">
 </details>
 
 <br>
