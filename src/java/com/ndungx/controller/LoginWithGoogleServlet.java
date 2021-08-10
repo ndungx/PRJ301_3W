@@ -52,9 +52,9 @@ public class LoginWithGoogleServlet extends HttpServlet {
         try {
             UserDTO dto = dao.checkLogin(userID, password);
 
-            Cookie cookie = new Cookie(userID, password);
-            cookie.setMaxAge(60 * 3);
-            response.addCookie(cookie);
+//            Cookie cookie = new Cookie(userID, password);
+//            cookie.setMaxAge(60 * 3);
+//            response.addCookie(cookie);
 
             if (dto != null) {
                 session.setAttribute("LOGIN_USER", dto);

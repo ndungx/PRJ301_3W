@@ -49,7 +49,7 @@ public class DispatchServlet extends HttpServlet {
 
         try {
             if (button == null) {
-                url = STARTUP_CONTROLLER;
+//                url = STARTUP_CONTROLLER;
             } else if (button.equals("Login")) {
                 url = LOGIN_CONTROLLER;
             } else if (button.equals("Search")) {
